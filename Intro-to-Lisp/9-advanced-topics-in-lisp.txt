@@ -1,0 +1,173 @@
+
+		Advanced Topics in Lisp
+
+Continuations are a powerful programming construct in Lisp that allows for flexible control flow and the ability to capture and later resume program execution. They can be particularly useful in web programming, as they can be used to implement continuations-based web servers and frameworks, which enable more flexible and interactive web applications.
+
+In Lisp, continuations are created using the call/cc function, which captures the current continuation of the program and returns it as a function. The captured continuation can then be invoked at any later point in the program's execution, effectively allowing the program to "jump back" to that point and resume execution from there.
+
+One example of using continuations in web programming is to implement a web framework that uses continuations to handle session state. This allows the framework to maintain the state of a user's interaction with a web application across multiple requests, without having to resort to cookies or other session tracking mechanisms.
+
+Here's an example of using call/cc to implement a simple "back" button in a web application:
+
+		(defun handle-request (request)
+		  (call/cc (lambda (cont)
+		             (let ((params (parse-params request)))
+		               (if (assoc "back" params)
+		                   (funcall cont "Back button pressed.")
+		                   (render-page))))))
+		
+		(defun render-page ()
+		  ;; Render the web page here...
+		  )
+		
+		(defun parse-params (request)
+		  ;; Parse the request parameters here...
+		  )
+
+In this example, the handle-request function captures the continuation of the
+program using call/cc. If the request includes a "back" parameter, the captured
+continuation is invoked with the message "Back button pressed." This allows the
+user to navigate back to a previous state in the application.
+
+Continuations can be a powerful tool in web programming, but they can also be
+quite complex and difficult to reason about. As such, they should be used
+judiciously and only in cases where they offer clear advantages over more
+traditional programming techniques.
+
+Exercise 1: Implement a simple calculator that uses continuations for
+backtracking. The calculator should allow basic arithmetic operations (+, -, *,
+/) on integers and parentheses to control the order of operations. If an
+invalid expression is entered, the calculator should allow the user to
+backtrack to the previous operation and correct the mistake. For example:
+
+		> (+ 3 (* 2 4)
+		invalid input, try again
+		> (+ 3 (* 2 4))
+		11
+		> (* (+ 2 3) (- 8 4)
+		invalid input, try again
+		> (* (+ 2 3) (- 8 4))
+		20
+		> (/ (* (+ 2 3) (- 8 4)) 2)
+		10
+
+Exercise 2: Write a function that takes a list of integers as input and returns
+a new list that contains only the even numbers in the original list, using lazy
+evaluation. The function should not generate all the even numbers up front, but
+should only generate them as needed. For example:
+
+		(defun lazy-evens (lst)
+		  ...)
+		  
+		(let ((numbers '(1 2 3 4 5 6)))
+		  (print (take 5 (lazy-evens numbers))))
+
+This should output: (2 4 6).
+
+Exercise 3: Implement a simple maze solver using continuations for
+backtracking. The maze is represented as a two-dimensional array of 0's and
+1's, where 0's represent walls and 1's represent open spaces. The solver should
+start at the upper-left corner and find a path to the lower-right corner, using
+only open spaces and without backtracking. If the solver encounters a dead end,
+it should backtrack to the last point where there were unexplored paths and try
+a different path. For example:
+
+		> (defparameter maze '((1 0 1 1 0)
+		                        (1 0 0 1 1)
+		                        (1 1 1 1 0)
+		                        (0 0 0 1 0)
+		                        (0 0 0 1 1)))
+		> (maze-solver maze)
+		((0 0) (0 1) (0 2) (1 2) (1 3) (1 4) (2 4) (3 4) (4 4))
+
+
+Lazy evaluation is a programming technique in which expressions are evaluated
+only when their results are actually needed. This approach can be particularly
+useful for working with infinite or very large data sets, where it is not
+practical to generate all the data up front.
+
+In Common Lisp, one way to implement lazy evaluation is through streams. A
+stream is a sequence of values that can be generated on the fly, as needed.
+Each value is computed only when it is accessed, and subsequent values are
+generated on demand.
+
+Here is an example of how streams can be used in Lisp:
+		
+		;; Define a function to generate a stream of Fibonacci numbers.
+		(defun fibonacci-stream ()
+		  (let ((a 0)
+		        (b 1))
+		    (lambda ()
+		      (prog1 a
+		        (setq a b
+		              b (+ a b))))))
+		
+		;; Define a function to take the first n elements from a stream.
+		(defun take (n stream)
+		  (loop repeat n
+		        collect (funcall stream)))
+		
+		;; Generate the first 10 Fibonacci numbers using a stream.
+		(take 10 (fibonacci-stream)) ;; => (0 1 1 2 3 5 8 13 21 34)
+
+In this example, we define a function fibonacci-stream that generates an
+infinite stream of Fibonacci numbers. The stream is generated using a closure
+that maintains two variables a and b, and updates them on each call to the
+function.
+
+We then define a function take that takes the first n elements from a given
+stream. This function repeatedly calls the stream generator function and
+collects the resulting values into a list.
+
+Finally, we use take to generate the first 10 Fibonacci
+
+Exercise 1:
+
+Write a function that generates an infinite list of Fibonacci numbers. Use lazy
+evaluation to only generate numbers as they are needed.
+
+Exercise 2:
+
+Write a function that takes a list of integers and returns a list of those
+integers plus their squares. Use lazy evaluation to only generate the squares
+as they are needed.
+
+Exercise 3:
+
+Write a function that takes a list of strings and returns the length of each
+string. Use lazy evaluation to only generate the lengths as they are needed.
+
+
+Garbage collection is an automated process that manages the memory usage in
+Lisp programs. It allows the programmer to use dynamic data structures without
+worrying about manual memory management. Garbage collection tracks the usage of
+memory allocated during runtime and frees memory that is no longer needed.
+
+In Lisp, garbage collection is usually performed by a separate process or
+thread that periodically scans the memory heap for objects that are no longer
+in use. The garbage collector can determine whether an object is still in use
+or not by tracing references to it from other objects in memory. If an object
+has no references to it, it is considered garbage and can be safely
+deallocated.
+
+One advantage of garbage collection is that it simplifies memory management in
+Lisp programs, since the programmer does not have to worry about explicitly
+allocating and deallocating memory. This can help reduce the number of bugs
+related to memory management and make it easier to write correct and reliable
+programs.
+
+However, garbage collection can also have some disadvantages. One potential
+issue is that the garbage collector may cause unpredictable delays or pauses in
+the program's execution. This can be a problem in real-time systems or
+applications that require high performance or low latency. Additionally,
+garbage collection may consume more memory than manual memory management, since
+the garbage collector needs to track and maintain references to all objects in
+memory.
+
+Despite these potential drawbacks, garbage collection is generally considered
+to be a powerful and convenient tool for managing memory in Lisp programs.
+
+Overall, these advanced topics in Lisp can be very powerful tools for working
+with complex programs and large data sets. Understanding how to use
+continuations, lazy evaluation, and garbage collection effectively can help
+make your Lisp programs more efficient and more maintainable over time.

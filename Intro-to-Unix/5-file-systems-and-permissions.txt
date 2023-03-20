@@ -1,0 +1,84 @@
+Lecture 5: Unix File System and Permissions
+
+I. File system hierarchy and types
+A. Hierarchy
+
+Root directory (/): The top-level directory in the Unix file system
+/bin: Contains essential system binaries and commands
+/etc: Contains system configuration files
+/home: Contains user home directories
+/usr: Contains user-installed applications, libraries, and documentation
+/var: Contains variable data, such as log files and databases
+/tmp: Contains temporary files that are deleted upon system reboot
+B. File system types
+
+Ext2, Ext3, Ext4: Common file systems for Linux systems
+HFS, HFS+: File systems used by macOS
+UFS, ZFS: File systems used by FreeBSD and other Unix-based systems
+FAT, NTFS: File systems used by Windows systems, but also supported by Unix systems through additional packages
+II. File permissions and ownership
+A. File permissions
+
+Read (r): Allows users to read the contents of a file or list the contents of a directory
+Write (w): Allows users to modify the contents of a file or create, delete, or rename files in a directory
+Execute (x): Allows users to execute a file as a program or enter a directory
+B. Ownership
+
+User (u): The owner of the file or directory
+Group (g): The group associated with the file or directory
+Others (o): All other users on the system
+C. Permission notation
+
+Numeric notation: Three-digit number representing user, group, and other permissions (e.g., 755)
+Symbolic notation: A series of characters representing permissions (e.g., rwxr-xr-x)
+III. Changing permissions and ownership using chmod, chown, and chgrp
+A. chmod (change mode)
+
+Used to change file or directory permissions
+Can use numeric or symbolic notation (e.g., chmod 755 myfile.txt or chmod u=rwx,go=rx myfile.txt)
+Can change permissions recursively with the -R flag
+B. chown (change owner)
+
+Used to change the owner of a file or directory
+Syntax: chown new_owner myfile.txt
+Can change ownership recursively with the -R flag
+C. chgrp (change group)
+
+Used to change the group associated with a file or directory
+Syntax: chgrp new_group myfile.txt
+Can change group ownership recursively with the -R flag
+IV. Working with file permissions and ownership in Rust
+A. Changing permissions
+
+    use std::fs;
+    use std::os::unix::fs::PermissionsExt;
+
+    fn main() -> std::io::Result<()> {
+        let file_path = "myfile.txt";
+        let mut permissions = fs::metadata(file_path)?.permissions();
+        permissions.set_mode(0o755);
+        fs::set_permissions(file_path, permissions)?;
+
+        Ok(())
+    }
+
+In this example, we use Rust's std::fs and std::os::unix::fs::PermissionsExt modules to change the permissions of a file to 755 (rwxr-xr-x).
+B. Changing ownership
+
+    use std::fs;
+    use std::os::unix::fs::chown;
+
+    fn main() -> std::io::Result<()> {
+        let file_path = "myfile.txt";
+        let new_owner_uid = 1000; // Replace with the desired UID
+        let new_group_gid = 1000; // Replace with the desired GID
+
+        chown(file_path, Some(new_owner_uid), Some(new_group_gid))?;
+
+        Ok(())
+    }
+
+In this example, we use Rust's std::fs and std::os::unix::fs::chown modules to change the ownership and group of a file. You need to replace the new_owner_uid and new_group_gid variables with the desired UID and GID values.
+
+In conclusion, understanding the Unix file system hierarchy, file permissions, and ownership is essential for network administrators and software engineers. Unix provides tools like chmod, chown, and chgrp to manage permissions and ownership. In Rust, you can use the std::fs and std::os::unix::fs modules to work with permissions and ownership, allowing you to build programs that interact with the Unix file system securely and efficiently.
+

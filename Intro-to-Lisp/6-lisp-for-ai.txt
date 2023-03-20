@@ -1,0 +1,139 @@
+
+		Lisp for AI
+
+Lisp has a long history in AI research and has been used extensively in the
+development of AI applications. One of the main reasons Lisp has been popular
+in AI is its support for symbolic computation, which is the manipulation of
+symbols rather than numbers. This is particularly useful in applications like
+natural language processing, where understanding the meaning of language
+requires dealing with symbols and their relationships to each other.
+
+In the 1950s and 60s, Lisp was used to develop some of the earliest AI
+programs, such as the General Problem Solver and the Logic Theorist. These
+programs demonstrated the power of symbolic computation and were instrumental
+in establishing AI as a field of research.
+
+Today, Lisp continues to be used in AI research and applications, particularly
+in areas like natural language processing, knowledge representation and
+reasoning, and expert systems. Lisp is also used in machine learning
+applications, with libraries like Weka providing support for common machine
+learning algorithms.
+
+Overall, Lisp's history in AI research and its continued use in AI applications
+demonstrate its effectiveness in dealing with symbolic computation and its
+suitability for solving complex AI problems.
+
+
+Natural language processing (NLP) is a field of study that involves the
+development of algorithms and models that can process and understand human
+language. Lisp has a rich history in NLP research and continues to be used in
+many NLP applications today. In this section, we will explore some of the
+capabilities of Lisp for NLP, including string manipulation and regular
+expressions.
+
+String Manipulation:
+Lisp provides a rich set of string manipulation functions that can be used to
+process text data. Here are some examples:
+
+Concatenation: The CONCATENATE function can be used to join two or more strings
+together.
+
+		(concatenate 'string "Hello " "world!") ;; Output: "Hello world!"
+
+Substring Extraction: The SUBSEQ function can be used to extract a substring
+from a larger string.
+
+		(subseq "Hello world!" 0 5) ;; Output: "Hello"
+
+String Searching: The SEARCH function can be used to search for a substring
+within a larger string.
+
+		(search "world" "Hello world!") ;; Output: 6
+
+
+Regular Expressions:
+Lisp also provides powerful regular expression capabilities that can be used to
+match and extract patterns from text data. The most commonly used functions for
+regular expressions are REGEXP-EXEC and REGEXP-REPLACE. Here are some examples:
+
+Matching: The REGEXP-EXEC function can be used to match a pattern within a
+string.
+
+		(regexp-exec "Hello world!" "wor..") ;; Output: ("worl" 6 10)
+
+Replacement: The REGEXP-REPLACE function can be used to replace a pattern
+within a string with another string.
+		
+		(regexp-replace "Hello world!" "wor.." "planet") ;; Output: "Hello planet!"
+
+
+Lisp libraries for NLP: Lisp also provides several libraries for NLP tasks such
+as text classification, sentiment analysis, and named entity recognition. One
+popular library for machine learning in Lisp is Weka, which provides a wide
+range of algorithms for data mining and machine learning tasks.
+
+Here is an example of using Weka for text classification:
+
+		;; Load the Weka library
+		(ql:quickload :weka)
+
+		;; Load the data
+		(defparameter *data* (weka:arff-read "path/to/data.arff"))
+
+		;; Train the classifier
+		(defparameter *classifier* (weka:j48-train *data*))
+		
+		;; Classify new instances
+		(weka:classify *classifier* '(1 0 0 1))
+
+In this example, we loaded a dataset in the ARFF format, trained a J48 decision
+tree classifier on the data, and then used the classifier to classify a new
+instance. Weka provides a wide range of algorithms and tools for machine
+learning tasks, making it a powerful tool for NLP and other AI applications.
+
+Exercise:
+Create a classification model using Weka in Lisp to classify iris flower
+species based on their sepal length, sepal width, petal length, and petal
+width. Use the iris dataset that is built into Weka and split it into a
+training set and a testing set. Evaluate the accuracy of the model on the
+testing set.
+
+Hints:
+Load the iris dataset using (load-data "datasets/iris.arff")
+Split the dataset into training and testing sets using (partition-data iris-dataset 0.7)
+Create a J48 decision tree classifier using (make-instance 'weka.classifiers.trees.J48)
+Train the classifier on the training set using (train classifier training-set)
+Test the classifier on the testing set using (test classifier testing-set)
+Evaluate the accuracy of the model using (measure-eval-predictions testing-set (predictions classifier testing-set))
+
+
+
+
+
+
+Solution:
+;; Load the Weka library
+(load "weka.lisp")
+
+;; Load the iris dataset
+(let ((iris-dataset (load-data "datasets/iris.arff")))
+  ;; Split the dataset into training and testing sets
+  (let ((partitions (partition-data iris-dataset 0.7)))
+    (let ((training-set (first partitions))
+          (testing-set (second partitions)))
+      ;; Create a J48 decision tree classifier
+      (let ((classifier (make-instance 'weka.classifiers.trees.J48)))
+        ;; Train the classifier on the training set
+        (train classifier training-set)
+        ;; Test the classifier on the testing set
+        (let ((predictions (predictions classifier testing-set)))
+          ;; Evaluate the accuracy of the model
+          (let ((accuracy (measure-eval-predictions testing-set predictions)))
+            (format t "Accuracy: ~A~%" accuracy)))))))
+
+This code loads the iris dataset, splits it into training and testing sets,
+creates a J48 decision tree classifier, trains it on the training set, tests it
+on the testing set, and evaluates the accuracy of the model on the testing set.
+The output should be the accuracy of the model on the testing set.
+
+

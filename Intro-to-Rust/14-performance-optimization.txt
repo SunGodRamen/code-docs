@@ -1,0 +1,83 @@
+Lesson 14: Performance Optimization in Rust
+
+Profiling Rust applications
+Profiling is the process of measuring the performance of your application to identify bottlenecks and optimize your code. Rust applications can be profiled using a variety of tools, such as the built-in profiler in LLVM, perf on Linux, or Instruments on macOS.
+
+Example: Profiling with perf (Linux)
+
+First, compile your Rust application with debugging symbols and optimizations enabled:
+
+    $ cargo build --release
+
+Next, run the perf tool to record a profile of your application:
+
+    $ perf record -g ./target/release/my_app
+
+Finally, analyze the recorded profile using perf report:
+
+    $ perf report
+
+Benchmarking with Criterion.rs
+Criterion.rs is a powerful benchmarking library for Rust that provides statistical analysis of performance data, automatic generation of plots and graphs, and a stable benchmarking API.
+
+Example: Benchmarking with Criterion.rs
+
+First, add Criterion as a dependency in your Cargo.toml file:
+
+    [dev-dependencies]
+    criterion = "0.3"
+
+Next, create a benches directory and a benchmark file:
+
+    $ mkdir benches
+    $ touch benches/my_benchmark.rs
+
+Write a simple benchmark that tests the performance of a function:
+File: benches/my_benchmark.rs
+
+    use criterion::{black_box, criterion_group, criterion_main, Criterion};
+    use my_app::my_function;
+
+    fn my_benchmark(c: &mut Criterion) {
+        c.bench_function("my_function", |b| b.iter(|| my_function(black_box(10))));
+    }
+
+    criterion_group!(benches, my_benchmark);
+    criterion_main!(benches);
+
+Finally, run your benchmark with cargo bench:
+
+    $ cargo bench
+
+SIMD and other low-level optimizations
+SIMD (Single Instruction, Multiple Data) is a technique that allows you to perform the same operation on multiple data elements simultaneously. Rust provides support for SIMD through the packed_simd crate and the core::arch module.
+
+Example: SIMD with the packed_simd crate
+
+First, add the packed_simd crate as a dependency in your Cargo.toml file:
+
+    [dependencies]
+    packed_simd = "0.3"
+
+Next, write a function that uses SIMD to perform vector addition:
+File: src/lib.rs
+
+    use packed_simd::f32x4;
+
+    pub fn simd_add(a: &[f32], b: &[f32], c: &mut [f32]) {
+        assert_eq!(a.len(), b.len());
+        assert_eq!(a.len(), c.len());
+
+        let chunks = a.len() / 4;
+
+        for i in 0..chunks {
+            let a_chunk = f32x4::from_slice_unaligned(&a[i * 4..]);
+            let b_chunk = f32x4::from_slice_unaligned(&b[i * 4..]);
+            let c_chunk = a_chunk + b_chunk;
+            c_chunk.write_to_slice_unaligned(&mut c[i * 4..]);
+        }
+    }
+
+In this example, we use the packed_simd crate to perform vector addition using SIMD instructions. The f32x4 type represents a vector of four 32-bit floating-point numbers that can be processed simultaneously.
+
+This concludes our in-depth lesson on performance optimization in Rust. 

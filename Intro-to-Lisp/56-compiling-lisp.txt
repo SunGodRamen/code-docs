@@ -1,0 +1,65 @@
+In order to compile and run Lisp code, you need a Lisp implementation. Here are
+some popular Lisp implementations:
+
+	- SBCL (Steel Bank Common Lisp)
+	- CLISP (Common Lisp)
+	- ECL (Embeddable Common Lisp)
+	- LispWorks
+	- Allegro CL
+	- Once you have installed a Lisp implementation, you can save your code in a file
+	- with the ".lisp" extension. Then, you can load and execute the code from the
+	- Lisp REPL (Read-Eval-Print Loop) by using the (load "filename.lisp") function.
+
+Linux:
+To install SBCL (Steel Bank Common Lisp) on a Linux-based system, you can follow these steps:
+Open a terminal window.
+Update the package list:
+		sudo apt update
+Install SBCL:
+		sudo apt install sbcl
+Verify that SBCL is installed:
+		sbcl --version
+
+Here is an example of how to compile and run the code in SBCL:
+
+  1. Save the code in a file named "myprogram.lisp".
+  2. Open a terminal or command prompt.
+  3. Type sbcl to start the SBCL REPL.
+  4. Type (load "myprogram.lisp") to load and compile the code.
+  5. Type (in-package :cl-user) to switch to the package where the code was loaded.
+  6. Type (run) to execute the code.
+
+Note that the exact steps may differ depending on the Lisp implementation you
+are using. Also, you can use an Integrated Development Environment (IDE) such
+as Emacs with SLIME, LispWorks IDE, or CCLIDE to write, compile, and execute
+Lisp code.
+
+Mac:
+On a Mac, you can install a Common Lisp implementation such as SBCL or Clozure CL and then use a terminal to compile and run Lisp code.
+Here are the general steps to compile Lisp code on a Mac:
+  1. Install a Common Lisp implementation such as SBCL or Clozure CL. One way to do this is by using a package manager such as Homebrew. For example, to install SBCL, you can run the command:
+		brew install sbcl
+  2. Open a terminal window and navigate to the directory where your Lisp code is located.
+  3. Start the Lisp REPL (Read-Eval-Print Loop) by running the command:
+		sbcl
+  4. In the Lisp REPL, load your Lisp file by running the command:
+		(load "filename.lisp")
+  5. This will compile and load your Lisp code into memory.
+
+To execute a function defined in your Lisp code, simply call the function by name, followed by any arguments. For example:
+		(my-function arg1 arg2)
+This will execute the my-function function with the arg1 and arg2 arguments.
+
+To exit the Lisp REPL, type (quit) or use the keyboard shortcut Ctrl-D.
+
+Windows:
+Here are the steps to install SBCL on Windows and compile a program:
+  1. Go to the SBCL website and download the Windows binary distribution from the download page.
+  2. Open the downloaded .msi file and follow the installation instructions.
+  3. Once installed, open the command prompt and navigate to the directory where your Lisp file is located.
+  4. Type sbcl to launch the SBCL interpreter.
+  5. In the SBCL interpreter, type (load "filename.lisp") to load your Lisp program.
+  6. To compile the program, type (compile-file "filename.lisp"). This will create a compiled file with a .fasl extension.
+  7. To run the compiled file, type (load "filename.fasl") in the SBCL interpreter.
+
+

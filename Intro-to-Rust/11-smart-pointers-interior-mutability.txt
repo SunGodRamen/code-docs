@@ -1,0 +1,127 @@
+Lesson 11: Smart Pointers and Interior Mutability
+
+Reference Counting with Rc and Arc
+Rc (Reference Counting) and Arc (Atomic Reference Counting) are smart pointers that keep track of the number of references to a value, deallocating the value when the reference count drops to zero. Rc is used for single-threaded scenarios, while Arc is used for multi-threaded scenarios.
+
+Example: Using Rc
+
+    use std::rc::Rc;
+
+    struct Foo {
+        data: i32,
+    }
+
+    fn main() {
+        let foo = Rc::new(Foo { data: 42 });
+        let foo2 = Rc::clone(&foo);
+        let foo3 = foo.clone();
+
+        println!("foo data: {}", foo.data);
+        println!("foo2 data: {}", foo2.data);
+        println!("foo3 data: {}", foo3.data);
+        println!("Reference count: {}", Rc::strong_count(&foo));
+    }
+
+Example: Using Arc
+
+    use std::sync::Arc;
+    use std::thread;
+
+    struct Bar {
+        data: i32,
+    }
+
+    fn main() {
+        let bar = Arc::new(Bar { data: 42 });
+        let bar2 = bar.clone();
+        let bar3 = bar.clone();
+
+        let handle = thread::spawn(move || {
+            println!("bar2 data: {}", bar2.data);
+        });
+
+        println!("bar data: {}", bar.data);
+        println!("bar3 data: {}", bar3.data);
+
+        handle.join().unwrap();
+    }
+
+Interior Mutability with RefCell and Mutex
+RefCell and Mutex provide interior mutability, which allows you to mutate the contents of an object even when you have a shared reference to it. RefCell enforces borrowing rules at runtime and is used in single-threaded scenarios, while Mutex is used in multi-threaded scenarios.
+
+Example: Using RefCell
+
+use std::cell::RefCell;
+
+    fn main() {
+        let data = RefCell::new(5);
+
+        let mut data_ref = data.borrow_mut();
+        *data_ref += 1;
+        println!("data: {:?}", data);
+
+        // The following line would panic due to a runtime borrow violation
+        // let data_ref2 = data.borrow();
+    }
+
+Example: Using Mutex
+
+    use std::sync::{Arc, Mutex};
+    use std::thread;
+
+    fn main() {
+        let data = Arc::new(Mutex::new(5));
+
+        let data_clone = data.clone();
+        let handle = thread::spawn(move || {
+            let mut data_lock = data_clone.lock().unwrap();
+            *data_lock += 1;
+            println!("Thread data: {:?}", data_clone);
+        });
+
+        let mut data_lock = data.lock().unwrap();
+        *data_lock += 1;
+        println!("Main data: {:?}", data);
+
+        handle.join().unwrap();
+    }
+
+Implementing Custom Smart Pointers
+You can also implement your own smart pointers by implementing the Deref and Drop traits for your custom types.
+
+Example: Custom Smart Pointer
+
+    use std::ops::{Deref, Drop};
+
+    struct CustomSmartPointer<T> {
+        data: T,
+    }
+
+    impl<T> CustomSmartPointer<T> {
+        fn new(data: T) -> CustomSmartPointer<T> {
+            CustomSmartPointer { data }
+        }
+    }
+
+    impl<T> Deref for CustomSmartPointer<T> {
+        type Target = T;
+
+        fn deref(&self) -> &Self::Target {
+            &self.data
+        }
+    }
+
+    impl<T> Drop for CustomSmartPointer<T> {
+        fn drop(&mut self) {
+            println!("Dropping CustomSmartPointer with data: {:?}", self.data);
+        }
+    }
+
+    fn main() {
+        let smart_pointer = CustomSmartPointer::new("Hello, smart pointer!");
+        println!("{}", *smart_pointer);
+    } // The Drop trait's drop method is called automatically when the smart_pointer goes out of scope.
+
+In this example, we have implemented the Drop trait for our custom smart pointer. When the smart_pointer goes out of scope, the drop method will be called automatically, allowing us to perform any necessary cleanup or deallocation.
+
+This concludes our in-depth lesson on smart pointers and interior mutability in Rust. We have covered reference counting with Rc and Arc, interior mutability with RefCell and Mutex, and implementing custom smart pointers with the Deref and Drop traits. These concepts are essential for understanding memory management and safety in Rust.

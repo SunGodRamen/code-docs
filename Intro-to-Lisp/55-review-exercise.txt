@@ -1,0 +1,38 @@
+
+		Section 1: Review
+
+
+This exercise will challenge you to use all of the concepts covered in the
+syllabus up to chapter 5, including metaprogramming, functional programming,
+object-oriented programming, and lists. It will also allow you to develop your
+skills in generating and manipulating code at runtime, and using Lisp's
+advanced features to create powerful and flexible programs.
+
+Write a Lisp program that generates a class hierarchy for mathematical
+expressions, including addition, subtraction, multiplication, and division. The
+program should allow expressions to be constructed and evaluated at runtime
+using a combination of functional and object-oriented programming techniques.
+Here are the specific requirements:
+
+   1) Define a base class called expression with methods for evaluating the
+expression and converting it to a string representation.
+
+   2) Define subclasses for each mathematical operation (addition, subtraction,
+multiplication, and division) that inherit from expression. Each subclass
+should define methods for evaluating the operation and converting it to a
+string representation.
+
+   3) Use macros to generate classes and methods at compile-time based on a list of
+expressions provided at runtime. The program should be able to dynamically
+generate new expression classes based on the input list.
+
+   4) Use functional programming techniques to allow expressions to be constructed
+and evaluated at runtime using higher-order functions and closures. The program
+should be able to construct complex expressions by combining simple expressions
+using functions like map, reduce, and filter.
+
+   5) Use object-oriented programming techniques to allow expressions to be
+manipulated and optimized at runtime using polymorphism and inheritance. The
+program should be able to optimize expressions by simplifying them using
+algebraic identities and other mathematical rules.
+

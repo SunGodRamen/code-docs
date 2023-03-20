@@ -1,0 +1,114 @@
+Lecture 3: Unix Shells and Command Line Interface
+
+I. Common Unix shells: sh, bash, csh, tcsh, zsh, and ksh
+A. sh (Bourne Shell)
+
+The original Unix shell, developed by Stephen Bourne at AT&T Bell Labs
+Provides a simple yet powerful scripting language
+Lacks some advanced features found in modern shells
+B. bash (Bourne-Again SHell)
+
+A superset of the Bourne Shell, developed by Brian Fox for the GNU project
+Includes additional features, such as command history, command completion, and improved scripting capabilities
+The default shell on most Linux distributions and macOS
+C. csh (C Shell)
+
+Developed by Bill Joy at the University of California, Berkeley
+Features a syntax similar to the C programming language
+Introduced features like aliases, job control, and history
+D. tcsh (TENEX C Shell)
+
+An enhanced version of the C Shell, developed by Ken Greer
+Adds features such as command-line editing, command completion, and command substitution
+Often used as an interactive shell on BSD-based systems
+E. zsh (Z Shell)
+
+Developed by Paul Falstad as an extended Bourne Shell
+Combines features from bash, ksh, and tcsh
+Highly customizable and includes advanced features like dynamic autocompletion and advanced scripting capabilities
+F. ksh (Korn Shell)
+
+Developed by David Korn at AT&T Bell Labs
+Compatible with the Bourne Shell but includes additional features, such as command history, aliases, and arithmetic expressions
+A popular choice for scripting on commercial Unix systems
+II. Basic shell commands and utilities
+A. Navigating the file system
+
+pwd: Print the current working directory
+cd: Change the current working directory
+ls: List files and directories
+B. Manipulating files and directories
+
+cp: Copy files or directories
+mv: Move or rename files or directories
+rm: Remove files or directories
+mkdir: Create a new directory
+touch: Create an empty file or update the file's timestamp
+C. File and text manipulation
+
+cat: Display the contents of a file
+more or less: Display the contents of a file one screen at a time
+head and tail: Display the first or last few lines of a file
+grep: Search for text patterns within files
+sed: Stream editor for manipulating text
+awk: Text processing and data extraction tool
+D. System information and process management
+
+ps: Display information about running processes
+top or htop: Display system and process information in real-time
+kill: Terminate a running process
+df: Display disk usage information
+free: Display memory usage information
+uname: Display system information
+III. Navigating and manipulating the file system using Rust
+A. Navigating the file system
+
+    use std::env;
+    use std::fs;
+
+    fn main() {
+        // Print the current working directory
+        let current_dir = env::current_dir().unwrap();
+        println!("Current directory: {}", current_dir.display());
+
+        // List files and directories
+        let entries = fs::read_dir(current_dir).unwrap();
+        for entry in entries {
+            let entry = entry.unwrap();
+            println!("{}", entry.path().display());
+        }
+    }
+
+In this example, we use Rust's std::env and std::fs modules to print the current working directory and list the files and directories in it.
+
+B. Manipulating files and directories
+
+    use std::fs;
+    use std::io::Write;
+    use std::path::Path;
+
+    fn main() {
+        // Create a new directory
+        fs::create_dir("example_directory").unwrap();
+
+        // Create a new file and write to it
+        let mut file = fs::File::create("example_file.txt").unwrap();
+        file.write_all(b"Hello, world!").unwrap();
+
+        // Copy the file to a new location
+        fs::copy("example_file.txt", "example_directory/example_file_copy.txt").unwrap();
+
+        // Move the file to a new location
+        fs::rename("example_file.txt", "example_directory/example_file_moved.txt").unwrap();
+
+        // Remove the file
+        let file_path = Path::new("example_directory/example_file_copy.txt");
+        fs::remove_file(file_path).unwrap();
+
+        // Remove the directory
+        fs::remove_dir("example_directory").unwrap();
+    }
+
+In this example, we use Rust's std::fs, std::io, and std::path modules to create and manipulate files and directories. We create a new directory, create a new file and write to it, copy the file to a new location, move the file to a new location, and then remove both the file and the directory.
+
+In conclusion, Unix shells and the command-line interface are essential tools for interacting with Unix systems, providing users with a powerful and flexible way to manage files, processes, and system resources. Familiarity with common Unix shells and basic shell commands is critical for working effectively in a Unix environment. By leveraging the Rust programming language, you can interact with the file system in a safe and efficient manner, allowing you to perform similar tasks as you would with shell commands.

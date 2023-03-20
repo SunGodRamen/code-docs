@@ -1,0 +1,109 @@
+Lecture 8: Unix Networking Basics
+
+I. Network configuration and interfaces
+A. Network interfaces
+
+Connect a Unix system to a network
+Types: Ethernet (e.g., eth0), wireless (e.g., wlan0), loopback (e.g., lo)
+Configured using system files (e.g., /etc/network/interfaces) or network management tools (e.g., NetworkManager)
+B. IP addressing
+
+Assigns a unique address to each network interface
+IPv4: 32-bit address (e.g., 192.168.1.1)
+IPv6: 128-bit address (e.g., 2001:db8::1)
+II. Basic networking commands: ifconfig, ip, netstat, and route
+A. ifconfig
+
+Displays and configures network interfaces
+Syntax: ifconfig [interface] [options]
+Deprecated in favor of the "ip" command
+B. ip
+
+A versatile tool for managing IP addresses, routes, and network interfaces
+Syntax: ip [options] OBJECT [COMMAND]
+Examples: ip addr show, ip route show, ip link set eth0 up
+C. netstat
+
+Displays network connections, routing tables, and interface statistics
+Syntax: netstat [options]
+Examples: netstat -rn (routing table), netstat -an (active connections)
+D. route
+
+Shows and manipulates the IP routing table
+Syntax: route [options]
+Deprecated in favor of the "ip" command
+III. Introduction to network troubleshooting tools: ping, traceroute, and nslookup
+A. ping
+
+Sends ICMP Echo Request packets to a target host to check network connectivity
+Syntax: ping [options] host
+Example: ping www.example.com
+B. traceroute
+
+Traces the path of network packets from the source to the destination host
+Syntax: traceroute [options] host
+Example: traceroute www.example.com
+C. nslookup
+
+Queries the DNS system for domain name or IP address information
+Syntax: nslookup [options] [name] [server]
+Example: nslookup www.example.com
+IV. Working with networking in Rust
+A. Resolving a domain name
+
+    use std::net::ToSocketAddrs;
+
+    fn main() -> std::io::Result<()> {
+        let host = "www.example.com:80";
+        let addresses = host.to_socket_addrs()?.collect::<Vec<_>>();
+
+        println!("Addresses for {}: {:?}", host, addresses);
+
+        Ok(())
+    }
+
+In this example, we use the ToSocketAddrs trait from Rust's std::net module to resolve a domain name to its IP addresses.
+
+B. Pinging a host
+
+Rust does not have a built-in function to perform ICMP pings. However, you can use an external crate like "ping" to accomplish this. Add the "ping" crate to your Cargo.toml file and run the following example:
+
+    use ping::{Ping, PingConfig};
+    use std::time::Duration;
+
+    fn main() -> Result<(), Box<dyn std::error::Error>> {
+        let host = "www.example.com
+        let config = PingConfig {
+            addr: host.parse()?,
+            count: 4,
+            interval: Duration::from_secs(1),
+            timeout: Duration::from_secs(5),
+        };
+
+        let mut pinger = Ping::new(config);
+
+        while let Some(response) = pinger.next()? {
+            println!("Received response: {:?}", response);
+        }
+
+        Ok(())
+    }
+
+In this example, we use the "ping" crate to send four ICMP Echo Request packets to a host with a 1-second interval and a 5-second timeout. The pinger.next() method returns a response for each packet received.
+
+C. Performing a DNS lookup
+
+    use std::net::lookup_host;
+
+    fn main() -> std::io::Result<()> {
+        let host = "www.example.com";
+        let addresses = lookup_host(host)?;
+
+        println!("Addresses for {}: {:?}", host, addresses.collect::<Vec<_>>());
+
+        Ok(())
+    }
+
+In this example, we use the lookup_host function from Rust's std::net module to perform a DNS lookup for a given domain name and print the IP addresses associated with it.
+
+In conclusion, understanding Unix networking basics is essential for network administrators and software engineers. Unix provides tools like ifconfig, ip, netstat, route, ping, traceroute, and nslookup for managing network configurations, interfaces, and troubleshooting. In Rust, you can use the std::net module to resolve domain names, perform DNS lookups, and interact with networking concepts. For more advanced networking tasks, you can use external crates like "ping" to perform ICMP pings.

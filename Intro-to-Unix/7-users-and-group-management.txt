@@ -1,0 +1,112 @@
+Lecture 7: Unix Users and Group Management
+
+I. User and group management commands: useradd, userdel, groupadd, and groupdel
+A. useradd
+
+Creates a new user account
+Syntax: useradd [options] username
+Common options: -c (comment), -d (home directory), -g (initial group), -s (login shell)
+B. userdel
+
+Deletes a user account and related files
+Syntax: userdel [options] username
+Common option: -r (remove home directory and mail spool)
+C. groupadd
+
+Creates a new group
+Syntax: groupadd [options] groupname
+D. groupdel
+
+Deletes a group
+Syntax: groupdel groupname
+II. Modifying user and group properties with usermod and groupmod
+A. usermod
+
+Modifies an existing user account
+Syntax: usermod [options] username
+Common options: -c (comment), -d (home directory), -g (initial group), -s (login shell)
+B. groupmod
+
+Modifies an existing group
+Syntax: groupmod [options] groupname
+Common options: -n (new group name), -g (new GID)
+III. The /etc/passwd, /etc/shadow, and /etc/group files
+A. /etc/passwd
+
+Contains user account information
+Fields: username, password (x if using shadow passwords), user ID (UID), group ID (GID), user information, home directory, login shell
+B. /etc/shadow
+
+Contains encrypted passwords and password aging information
+Fields: username, encrypted password, last password change, minimum password age, maximum password age, password warning period, password inactivity period, account expiration date
+C. /etc/group
+
+Contains group information
+Fields: group name, group password (x if using shadow group passwords), group ID (GID), list of group members
+IV. Working with users and groups in Rust
+A. Reading /etc/passwd
+
+    use std::fs::File;
+    use std::io::{BufRead, BufReader};
+
+    fn main() -> std::io::Result<()> {
+        let file = File::open("/etc/passwd")?;
+        let reader = BufReader::new(file);
+
+        for line in reader.lines() {
+            let line = line?;
+            let fields: Vec<&str> = line.split(':').collect();
+
+            println!("Username: {}, UID: {}, Home directory: {}, Shell: {}",
+                    fields[0], fields[2], fields[5], fields[6]);
+        }
+
+        Ok(())
+    }
+
+In this example, we read the contents of the /etc/passwd file and print the username, UID, home directory, and login shell for each user.
+
+B. Reading /etc/group
+
+    use std::fs::File;
+    use std::io::{BufRead, BufReader};
+
+    fn main() -> std::io::Result<()> {
+        let file = File::open("/etc/group")?;
+        let reader = BufReader::new(file);
+
+        for line in reader.lines() {
+            let line = line?;
+            let fields: Vec<&str> = line.split(':').collect();
+            println!("Group name: {}, GID: {}, Members: {}",
+                    fields[0], fields[2], fields[3]);
+        }
+
+        Ok(())
+    }
+
+In this example, we read the contents of the /etc/group file and print the group name, GID, and members for each group.
+
+C. Adding and removing users and groups (requires elevated privileges)
+
+Adding and removing users and groups programmatically using Rust can be done by invoking the system commands mentioned earlier (useradd, userdel, groupadd, groupdel). However, this requires elevated privileges and must be done with caution. Here's an example of creating a user with Rust:
+
+    use std::process::Command;
+
+    fn main() {
+        let username = "newuser";
+        let useradd_status = Command::new("useradd")
+            .arg(username)
+            .status()
+            .expect("Failed to execute useradd command");
+
+        if useradd_status.success() {
+            println!("User {} created successfully.", username);
+        } else {
+            eprintln!("Failed to create user {}.", username);
+        }
+    }
+
+Please note that this code must be run with administrator privileges (e.g., using sudo on Unix systems) to create a user successfully.
+
+In conclusion, understanding Unix users and group management is essential for network administrators and software engineers. Unix provides tools like useradd, userdel, groupadd, groupdel, usermod, and groupmod for managing users and groups. The /etc/passwd, /etc/shadow, and /etc/group files store user and group information. In Rust, you can read these files using the std::fs and std::io modules and manage users and groups by invoking system commands with the std::process::Command module. Remember that adding and removing users and groups typically requires elevated privileges and should be done with caution.

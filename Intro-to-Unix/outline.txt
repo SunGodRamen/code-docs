@@ -1,0 +1,91 @@
+Course Title: Unix Systems for Network Administrators and Software Engineers
+
+Lecture 1: Introduction to Unix Systems
+
+Brief history of Unix and its derivatives
+Unix vs. Linux: similarities and differences
+Importance of Unix in network administration and software engineering
+
+Lecture 2: Unix System Architecture
+
+Kernel, shell, and file system
+Process management and inter-process communication
+Memory management
+
+Lecture 3: Unix Shells and Command Line Interface
+
+Common Unix shells: sh, bash, csh, tcsh, zsh, and ksh
+Basic shell commands and utilities
+Navigating and manipulating the file system
+
+Lecture 4: Text Processing and File Editing
+
+Introduction to text editors: vi, vim, nano, and emacs
+File manipulation and text processing commands: grep, sed, and awk
+Regular expressions
+
+Lecture 5: Unix File System and Permissions
+
+File system hierarchy and types
+File permissions and ownership
+Changing permissions and ownership using chmod, chown, and chgrp
+
+Lecture 6: Unix Process Management
+
+Introduction to processes and threads
+Process monitoring with ps, top, and htop
+Process control: kill, pkill, and killall
+
+Lecture 7: Unix Users and Group Management
+
+User and group management commands: useradd, userdel, groupadd, and groupdel
+Modifying user and group properties with usermod and groupmod
+The /etc/passwd, /etc/shadow, and /etc/group files
+
+Lecture 8: Unix Networking Basics
+
+Network configuration and interfaces
+Basic networking commands: ifconfig, ip, netstat, and route
+Introduction to network troubleshooting tools: ping, traceroute, and nslookup
+
+Lecture 9: Network Services and Protocols
+
+Overview of common network services: SSH, FTP, NFS, and Samba
+Configuring and troubleshooting network services
+Introduction to network protocols: TCP/IP, UDP, and ICMP
+
+Lecture 10: Unix System Security
+
+Unix security principles and best practices
+Firewall configuration with iptables and ufw
+SSH security and key management
+
+Lecture 11: Package Management and Software Installation
+
+Package management systems: apt, yum, and pacman
+Installing, updating, and removing software
+Package dependency management
+
+Lecture 12: System Monitoring and Performance Tuning
+
+Introduction to system monitoring tools: vmstat, iostat, and sar
+Analyzing system logs with syslog and logrotate
+Performance tuning and optimization techniques
+
+Lecture 13: Unix Shell Scripting
+
+Shell scripting basics: variables, loops, and conditionals
+Writing, executing, and debugging shell scripts
+Practical shell scripting examples for network administration and software engineering
+
+Lecture 14: Backup and Disaster Recovery
+
+Backup strategies and tools: tar, rsync, and dd
+Disaster recovery planning
+Creating and restoring backups
+
+Lecture 15: Advanced Unix Concepts and Emerging Technologies
+
+Containers and virtualization: Docker and LXC
+Orchestration and configuration management: Ansible, Chef, and Puppet
+Cloud computing and Unix systems: AWS, Google Cloud, and Azure

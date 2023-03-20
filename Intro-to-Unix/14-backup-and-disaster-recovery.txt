@@ -1,0 +1,76 @@
+Lecture 14: Backup and Disaster Recovery
+
+I. Backup strategies and tools
+A. Overview
+
+Essential for protecting data and ensuring business continuity
+Regular backups can minimize data loss and downtime
+Different strategies and tools are available to suit various needs
+B. Backup strategies
+
+Full backup: Backup of all data, provides the most comprehensive protection
+Incremental backup: Backup of data changed since the last backup, saves time and storage space
+Differential backup: Backup of data changed since the last full backup, a compromise between full and incremental backups
+C. Backup tools
+
+tar: Create and extract archive files
+rsync: Incrementally synchronize files and directories across local and remote systems
+dd: Low-level utility for copying and converting raw data
+II. Disaster recovery planning
+A. Overview
+
+A comprehensive plan to restore systems and data after a disaster
+Essential for minimizing downtime and ensuring business continuity
+Should include strategies for data backup, hardware replacement, and system restoration
+B. Key components
+
+Recovery objectives: Define Recovery Time Objective (RTO) and Recovery Point Objective (RPO)
+Hardware and software inventory: Maintain an up-to-date list of hardware and software resources
+Recovery procedures: Document step-by-step procedures for system recovery
+Testing and updates: Regularly test and update the disaster recovery plan to ensure its effectiveness
+III. Creating and restoring backups
+A. Creating backups
+
+Use backup tools to create and store backup data
+Schedule regular backups using tools like cron
+Verify backup integrity to ensure successful restoration
+B. Restoring backups
+
+Identify the most recent and relevant backup for restoration
+Use backup tools to restore data to the appropriate location
+Verify that systems and data are functioning correctly after restoration
+IV. Rust examples for backup and disaster recovery
+
+While there are no specific Rust tools for backup and disaster recovery, you can use Rust to create custom backup solutions or integrate with existing backup tools. Here is an example using the tar crate to create a tar archive:
+
+    [dependencies]
+    tar = "0.4"
+
+
+------
+
+    use std::fs::File;
+    use std::io::{self, BufWriter};
+    use tar::Builder;
+
+    fn main() -> io::Result<()> {
+        let archive_path = "backup.tar";
+        let file = File::create(archive_path)?;
+        let buf_writer = BufWriter::new(file);
+        let mut builder = Builder::new(buf_writer);
+
+        let files = vec!["file1.txt", "file2.txt", "file3.txt"];
+
+        for file_path in files {
+            let file = File::open(file_path)?;
+            builder.append_path(file_path)?;
+        }
+
+        builder.into_inner()?.finish()?;
+        println!("Backup created at {}", archive_path);
+        Ok(())
+    }
+
+In this example, we use the tar crate to create a tar archive containing the specified files. You can customize this example to create a more sophisticated backup solution or integrate it with other Rust libraries for additional functionality.
+
+In conclusion, Lecture 14 covered backup strategies and tools, disaster recovery planning, and creating and restoring backups. While there are no specific Rust tools for backup and disaster recovery, you can use Rust to create custom backup solutions or integrate with existing backup tools. By understanding the importance of backups and disaster recovery planning, you can ensure the safety and continuity of your data and systems.

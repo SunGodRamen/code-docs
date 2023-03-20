@@ -1,0 +1,106 @@
+Lecture 6: Unix Process Management
+
+I. Introduction to processes and threads
+A. Processes
+
+A process is a running instance of a program
+Each process has a unique process ID (PID)
+A process can spawn child processes, creating a hierarchy
+Processes can communicate with each other through inter-process communication (IPC) mechanisms
+B. Threads
+
+A thread is the smallest unit of execution within a process
+A process can have multiple threads, which share the same memory space and resources
+Threads allow for concurrent execution within a process, improving performance and responsiveness
+Threads have a unique thread ID (TID) within the process
+II. Process monitoring with ps, top, and htop
+A. ps (process status)
+
+Displays information about currently running processes
+Common options: -e (show all processes), -f (full-format listing), -u (display user-oriented format)
+Example: ps -ef
+B. top
+
+Provides a real-time, dynamic view of currently running processes
+Displays system information, such as uptime, load average, and memory usage
+Allows for process management, including sorting, filtering, and sending signals
+C. htop
+
+An enhanced version of top with a more user-friendly interface
+Provides additional features, such as tree view, process search, and resource meters
+Supports mouse interaction for process management
+III. Process control: kill, pkill, and killall
+A. kill
+
+Sends a signal to a process, usually to terminate it
+Requires the process ID (PID) as an argument
+Example: kill -9 12345 (sends the SIGKILL signal to process with PID 12345)
+B. pkill
+
+Sends a signal to processes based on process name or other attributes
+Example: pkill -9 -f "firefox" (sends the SIGKILL signal to all processes with "firefox" in the command line)
+C. killall
+
+Sends a signal to all processes with a specific name
+Example: killall -9 firefox (sends the SIGKILL signal to all processes named "firefox")
+IV. Working with processes in Rust
+A. Spawning a process
+
+    use std::process::Command;
+
+    fn main() {
+        let output = Command::new("ls")
+            .arg("-l")
+            .output()
+            .expect("Failed to execute command");
+
+        println!("Status: {}", output.status);
+        println!("Output: {}", String::from_utf8_lossy(&output.stdout));
+    }
+
+In this example, we use Rust's std::process::Command module to spawn a new process (ls -l) and capture its output.
+
+B. Terminating a process
+
+    use std::process::{Command, Child};
+    use std::thread;
+    use std::time::Duration;
+
+    fn main() {
+        let mut child = Command::new("sleep")
+            .arg("30")
+            .spawn()
+            .expect("Failed to execute command");
+
+        thread::sleep(Duration::from_secs(5));
+
+        child.kill().expect("Failed to terminate process");
+    }
+
+C. Interacting with processes
+
+    use std::process::{Command, Stdio};
+    use std::io::prelude::*;
+
+    fn main() -> std::io::Result<()> {
+        let mut child = Command::new("grep")
+            .arg("error")
+            .stdin(Stdio::piped())
+            .stdout(Stdio::piped())
+            .spawn()?;
+
+        {
+            let stdin = child.stdin.as_mut().expect("Failed to open stdin");
+            stdin.write_all(b"info: no error\nerror: something went wrong\ninfo: all good")?;
+        }
+
+        let output = child.wait_with_output()?;
+        println!("Output: {}", String::from_utf8_lossy(&output.stdout));
+
+        Ok(())
+    }
+
+In this example, we spawn a new process (grep error) and interact with its standard input (stdin) and standard output (stdout) using pipes. We write data to stdin and read the filtered output from stdout.
+
+In conclusion, understanding Unix process management is essential for network administrators and software engineers. Unix provides tools like ps, top, htop, kill, pkill, and killall for monitoring and controlling processes. In Rust, you can use the std::process module to spawn, interact with, and terminate processes, allowing you to build programs that interact with the Unix process management system effectively.
+

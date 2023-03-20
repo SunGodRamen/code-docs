@@ -1,0 +1,105 @@
+Lesson 13: Macros and Metaprogramming
+
+Introduction to Rust Macros
+Macros in Rust are a form of metaprogramming, allowing you to define reusable code patterns and generate code at compile time. Macros are expanded by the compiler and can reduce boilerplate code, improve readability, and provide more expressive APIs.
+
+Declarative Macros with macro_rules!
+Declarative macros are defined using the macro_rules! keyword. They use a pattern-based syntax for code generation and are the most common type of macros in Rust.
+
+Example: Simple Declarative Macro
+
+    macro_rules! say_hello {
+        () => {
+            println!("Hello, world!");
+        };
+    }
+
+    fn main() {
+        say_hello!();
+    }
+
+In this example, we define a simple macro called say_hello! that prints "Hello, world!" when invoked. The macro takes no arguments and uses the () pattern to match its input.
+
+Example: Declarative Macro with Arguments
+
+    macro_rules! multiply {
+        ($x:expr, $y:expr) => {
+            $x * $y
+        };
+    }
+
+    fn main() {
+        let result = multiply!(5, 7);
+        println!("5 times 7 is {}", result);
+    }
+
+In this example, we define a macro called multiply! that takes two expressions as arguments and returns their product. We use the $x:expr and $y:expr patterns to match expressions.
+
+Procedural Macros and Custom Derive
+Procedural macros are more powerful than declarative macros and allow you to generate code based on Rust tokens. They are defined in a separate crate with a special proc-macro type, and there are three kinds of procedural macros: custom derive, attribute-like, and function-like.
+
+Example: Custom Derive Macro
+
+To create a custom derive macro, first, create a new proc-macro crate:
+
+    $ cargo new --lib my_derive_macro --name my_derive_macro
+
+Update the Cargo.toml file in the new crate:
+
+    [lib]
+    proc-macro = true
+
+    [dependencies]
+    syn = "1.0"
+    quote = "1.0"
+
+Create a custom derive macro for a simple HelloWorld trait:
+
+    extern crate proc_macro;
+
+    use proc_macro::TokenStream;
+    use quote::quote;
+    use syn::{parse_macro_input, DeriveInput};
+
+    #[proc_macro_derive(HelloWorld)]
+    pub fn hello_world_derive(input: TokenStream) -> TokenStream {
+        let ast = parse_macro_input!(input as DeriveInput);
+        let name = &ast.ident;
+
+        let gen = quote! {
+            impl HelloWorld for #name {
+                fn hello_world() {
+                    println!("Hello, I'm an instance of {}", stringify!(#name));
+                }
+            }
+        };
+
+        gen.into()
+    }
+
+Now, in your main project, add the my_derive_macro crate as a dependency:
+
+    [dependencies]
+    my_derive_macro = { path = "../my_derive_macro" }
+
+Use the custom derive macro in your main project:
+File: src/main.rs
+
+    use my_derive_macro::HelloWorld;
+
+    trait HelloWorld {
+        fn hello_world();
+    }
+
+    #[derive(HelloWorld)]
+    struct MyStruct;
+
+    fn main() {
+        MyStruct::hello_world();
+    }
+
+In the custom derive macro example, we create a procedural macro that implements the HelloWorld trait for any type it's applied to. The macro generates an implementation of the hello_world function, which prints the name of the type it is applied to.
+
+When we use the #[derive(HelloWorld)] attribute on the MyStruct type in our main project, the HelloWorld trait is automatically implemented for it. We can then call the hello_world method on instances of MyStruct.
+
+This concludes our in-depth lesson on macros and metaprogramming in Rust.

@@ -1,0 +1,79 @@
+Lisp has a long history of being used in various industries, including but not
+limited to artificial intelligence, finance, gaming, and aerospace. Some
+notable companies that use Lisp include Google, NASA, and Jane Street.
+
+Google has been using Lisp since the company's inception, starting with the
+development of the company's web crawler, which was implemented in Common Lisp.
+Google has also developed and released several open source Lisp libraries,
+including Google Closure, a JavaScript library that includes a Lisp-style
+syntax for macros.
+
+NASA has used Lisp in various projects, including the development of software
+for space exploration, such as the Mars Rover mission. Lisp's ability to handle
+complex mathematical calculations and algorithms made it an ideal choice for
+these types of projects.
+
+Jane Street, a quantitative trading firm, heavily uses Lisp in its trading
+infrastructure. Lisp's powerful macros and functional programming capabilities
+make it well-suited for this type of work.
+
+Demand for Lisp programmers is relatively low compared to other programming
+languages, but there are still opportunities available, particularly in the
+industries mentioned above. The salary for Lisp programmers varies depending on
+location, company, and experience, but it is generally competitive with other
+software development positions.
+
+Companies hiring Lisp developers typically look for candidates with a strong
+background in functional programming, as well as experience with Lisp-specific
+libraries and tools. Knowledge of other programming languages and technologies
+is also important, as Lisp is often used in conjunction with other languages
+and technologies in real-world applications.
+
+If a developer enjoys using Lisp but wants to find a similar language with
+higher demand and potentially higher salaries, they might consider studying
+Clojure. Clojure is a modern Lisp dialect that runs on the Java Virtual Machine
+and has gained popularity in recent years for its ability to easily
+interoperate with Java libraries and frameworks. It has a growing community and
+is used by companies such as Amazon, Walmart, and Puppet Labs. Clojure also has
+a similar functional programming paradigm to Lisp, so many of the skills
+learned in Lisp will transfer over to Clojure.
+
+That being said, it will be said to you that Lisp can been used in a variety of
+industries, including aerospace, finance, and technology. Some well-known
+companies that have used Lisp include Google, NASA, and ITA Software (now part
+of Google). Lisp is valued for its ability to handle complex data structures
+and provide powerful abstractions, making it well-suited for applications such
+as AI, machine learning, and natural language processing.
+
+If you are just a code geek, then you are in luck. Lisp has a long standing
+community. The Lisp community is known for its collaborative spirit and focus
+on open-source software development. The community is passionate about
+developing and promoting the use of Lisp and related technologies.
+
+One of the main forums used by the Lisp community is the Common Lisp Wiki,
+which provides a platform for sharing information and resources related to
+Common Lisp development. The community also maintains several mailing lists,
+including the lisp-hug mailing list, which is used for general discussion about
+Lisp and related topics, and the comp.lang.lisp newsgroup.
+
+Contributing to the Lisp community can take many forms, including participating
+in discussions on mailing lists and forums, submitting bug reports and patches
+to open-source Lisp projects, and contributing to the development of new
+libraries and tools. The community values collaboration, creativity, and a
+commitment to open-source software development.
+
+In addition to contributing to open-source projects, Lisp developers can also
+participate in community events such as Lisp conferences and hackathons. These
+events provide opportunities for developers to network with other Lisp
+programmers, share ideas, and learn about the latest developments in Lisp
+technology.
+
+Overall, the Lisp community is an inclusive and welcoming group that values
+collaboration and innovation. By contributing to the community, Lisp developers
+can help to promote the use of Lisp and ensure that it continues to be a
+vibrant and dynamic language for years to come.
+
+
+
+And thats it, you can thank chat gpt for the content; I just edited minimally
+and formed the prompts.

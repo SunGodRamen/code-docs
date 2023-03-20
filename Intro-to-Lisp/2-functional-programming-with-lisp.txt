@@ -1,0 +1,249 @@
+
+
+		Functional Programming with Lisp
+
+
+Higher-order functions are functions that take other functions as arguments or
+return functions as results. In Lisp, higher-order functions are a fundamental
+feature of the language and are used extensively to build complex programs.
+
+Sorting and searching algorithms are common examples of higher-order functions
+in Lisp. These algorithms typically take a list of elements and a comparison
+function, and return a new list that has been sorted or searched based on the
+comparison function. Here are some examples:
+
+The "sort" function is a higher-order function that takes a list and a
+comparison function, and returns a new list that is sorted according to the
+comparison function. For example, the following expression sorts a list of
+numbers in ascending order:
+
+		(sort '(3 1 4 1 5 9 2 6 5 3) #'<)
+
+The "find-if" function is a higher-order function that takes a list and a
+predicate function, and returns the first element of the list that satisfies the
+predicate function. For example, the following expression finds the first even
+number in a list of numbers:
+		
+		(find-if #'evenp '(1 3 5 6 7 9))
+
+The "mapcar" function is a higher-order function that takes a function and one
+or more lists as arguments, and applies the function to each element of the
+list(s), returning a new list of the results. For example, the following
+expression multiplies each element of a list of numbers by 2:
+
+		(mapcar #'(lambda (x) (* x 2)) '(1 2 3 4 5))
+
+The "reduce" function is a higher-order function that takes a function, a list,
+and an optional initial value, and applies the function to the elements of the
+list, reducing the list to a single value. For example, the following expression
+calculates the sum of a list of numbers:
+		
+		(reduce #'+ '(1 2 3 4 5))
+
+In each of these examples, the higher-order function takes one or more other
+functions as arguments and uses them to perform the desired operation. This
+makes the code more modular and reusable, and allows for greater flexibility and
+expressiveness in programming.
+
+Writing Higher Order Functions In Lisp, a higher-order function is written like
+any other function, but it takes one or more functions as arguments and/or
+returns a function as its result. Here's an example of a higher-order function
+that takes a function as an argument:
+
+		(defun apply-twice (f x)
+		  "Applies function f to argument x twice."
+		  (funcall f (funcall f x)))
+
+In this example, the "apply-twice" function takes two arguments: a function "f"
+and a value "x". It then applies the function "f" twice to the value "x" by
+calling "funcall" twice with "f" and "x" as arguments.
+
+Higher-order functions can also return functions as their results. Here's an
+example of a higher-order function that returns a function:
+
+		(defun make-adder (x)
+		  "Returns a function that adds x to its argument."
+		  #'(lambda (y) (+ x y)))
+
+In this example, the "make-adder" function takes a number "x" as an argument and
+returns a lambda function that takes a number "y" and adds it to "x". The
+resulting function can be used like any other function in Lisp.
+
+Higher-order functions are a powerful feature of Lisp and functional programming
+in general. They allow for greater flexibility and expressiveness in
+programming, and can be used to write more modular and reusable code.
+
+Here are two exercises to practice using higher-order functions in Lisp:
+
+Write a function called "filter" that takes a list and a predicate function as
+arguments, and returns a new list that contains only the elements of the
+original list that satisfy the predicate function. For example, the following
+expression should return the list (2 4 6):
+
+		(filter #'evenp '(1 2 3 4 5 6))
+
+Write a function called "map" that takes a function and one or more lists as
+arguments, and applies the function to each element of the list(s), returning a
+new list of the results. For example, the following expression should return the
+list (2 4 6 8 10):
+
+		(map #'(lambda (x) (* x 2)) '(1 2 3 4 5))
+
+
+Closures and lexical scoping are important concepts in Lisp and functional
+programming in general.
+
+A closure is a function that "closes over" its environment, meaning that it
+captures and remembers the values of its enclosing environment at the time it
+was defined. This allows the function to access variables and functions that
+were in scope at the time of its definition, even if they are not in scope when
+the function is actually executed. Closures are useful for creating functions
+that have access to shared state, or for creating higher-order functions that
+return functions.
+
+Lexical scoping refers to the way that variables and functions are scoped in a
+program. In Lisp, variables and functions are scoped using lexical scoping,
+which means that the scope of a variable or function is determined by where it
+is defined in the source code. This is in contrast to dynamic scoping, which
+determines the scope of a variable or function based on the calling context.
+
+To define a closure in Lisp, you can use the "lambda" special form. The lambda
+form creates an anonymous function that can be assigned to a variable or passed
+as an argument to another function. The syntax for the lambda form is (lambda
+(arguments...) body...), where arguments is a list of arguments to the function,
+and body is one or more expressions that make up the body of the function.
+
+Here is an example of defining a closure in Lisp:
+
+		(defun make-adder (x)
+  		  (lambda (y) (+ x y)))
+
+		(defvar add5 (make-adder 5))
+
+		(add5 10) ;; evaluates to 15
+
+In this example, the make-adder function returns a closure that adds its
+argument x to its argument y. The add5 variable is assigned the result of
+calling make-adder with an argument of 5, which creates a closure that adds 5 to
+its argument. When add5 is called with an argument of 10, it returns the result
+15, which is the result of adding 5 to 10.
+
+To determine the lexical scope of a variable or function in Lisp, you can look
+at where it is defined in the source code. Variables and functions defined in
+the outermost scope of a program are in scope for the entire program, while
+variables and functions defined inside a function are only in scope within that
+function. Closures capture the scope of their enclosing environment, which
+allows them to access variables and functions that were in scope at the time
+they were defined.
+
+Write a function called "make-counter" that returns a closure that increments a
+counter each time it is called. The closure should remember the current value of
+the counter between calls. For example, the following expressions should return
+the values 1, 2, and 3, respectively:
+
+		(defvar counter (make-counter))
+		(funcall counter) ;; returns 1
+		(funcall counter) ;; returns 2
+		(funcall counter) ;; returns 3
+
+Write a function called "make-adder" that takes a number as an argument, and
+returns a closure that adds the given number to its argument. The closure should
+remember the value of the number between calls. For example, the following
+expressions should return the values 7, 9, and 11, respectively: scss
+
+		(defvar add5 (make-adder 5))
+		(funcall add5 2) ;; returns 7
+		(funcall add5 4) ;; returns 9
+		(defvar add6 (make-adder 6))
+		(funcall add6 5) ;; returns 11
+
+
+Writing recursive functions is a common programming technique used in Lisp, as
+in other functional programming languages. A recursive function is a function
+that calls itself with modified arguments, and continues to do so until some
+condition is met, at which point it returns a value.
+
+Here is an example of a recursive function that calculates the factorial of a
+number in Lisp:
+
+		(defun factorial (n)
+	  	  (if (= n 0)
+      		    1
+      		    (* n (factorial (- n 1)))))
+
+This function defines the factorial of a number n as the product of all positive
+integers up to n. If n is 0, the function returns 1, as the factorial of 0 is
+defined as 1. Otherwise, it multiplies n by the factorial of n-1, and returns
+the result.
+
+Tail recursion is a technique used to optimize the performance of recursive
+functions. In tail recursion, the function returns the result of the recursive
+call directly, without performing any additional computation. This allows the
+Lisp interpreter to optimize the function by reusing the same stack frame for
+each call, rather than creating a new stack frame for each recursive call.
+
+Here is an example of a tail-recursive version of the factorial function:
+
+		(defun factorial-tail (n &optional (acc 1))
+		  (if (= n 0)
+		      acc
+		      (factorial-tail (- n 1) (* n acc))))
+
+In this version, the function takes an additional parameter acc, which is the
+accumulated result of the computation so far. If n is 0, the function returns
+acc, which is the final result of the computation. Otherwise, it calls itself
+with n-1 as the new value of n, and n*acc as the new value of acc. This
+tail-recursive version of the function should be faster and more
+memory-efficient than the previous version, especially for large values of n.
+
+In general, tail recursion is a powerful technique for optimizing recursive
+functions in Lisp and other functional programming languages. By using tail
+recursion, you can write recursive functions that are both elegant and
+efficient, making it easier to solve complex problems using Lisp.
+
+
+
+In Lisp and functional programming in general, pure functions are functions that
+produce the same output for a given input, without modifying any external state.
+This means that pure functions only depend on their inputs, and do not have any
+side effects, which are changes made to external state by a function.
+
+Pure functions are important in functional programming because they are easy to
+reason about and test. Since pure functions only depend on their inputs, they
+are deterministic, meaning that given the same inputs, they will always produce
+the same output. This makes it easy to test pure functions, since you can simply
+compare the expected output to the actual output.
+
+In addition, pure functions are easy to compose and reuse, since they do not
+have any dependencies on external state. This makes it easier to build complex
+programs from small, modular functions that can be easily combined and reused in
+different contexts.
+
+Here is an example of a pure function in Lisp that calculates the square of a
+number:
+
+		(defun square (x)
+		  (* x x))
+
+This function takes a single argument x and returns the result of multiplying x
+by itself. It has no side effects, and will always return the same output for a
+given input.
+
+On the other hand, here is an example of a function that is not pure, since it
+modifies external state:
+
+		(defvar count 0)
+
+		(defun increment-count ()
+		  (setq count (+ count 1)))
+
+This function increments a global variable count by 1 each time it is called.
+Since it modifies external state, it is not pure, and its output will depend not
+only on its inputs, but also on the current value of the count variable.
+
+In summary, pure functions are a powerful tool in Lisp and functional
+programming in general, since they are easy to reason about, test, compose, and
+reuse. By using pure functions, you can build more modular, flexible, and
+maintainable programs that are easier to understand and debug.
+
+

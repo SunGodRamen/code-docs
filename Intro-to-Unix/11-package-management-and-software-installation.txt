@@ -1,0 +1,62 @@
+Lecture 11: Package Management and Software Installation
+
+I. Package management systems
+A. Overview
+
+Used to manage software installation and updates
+Handle package dependencies and system configuration
+Vary by Linux distribution
+B. Popular package management systems
+
+apt (Debian-based distributions, e.g., Ubuntu)
+yum (Red Hat-based distributions, e.g., Fedora)
+pacman (Arch Linux and derivatives)
+II. Installing, updating, and removing software
+A. Installing software
+
+apt: apt install <package>
+yum: yum install <package>
+pacman: pacman -S <package>
+B. Updating software
+
+apt: apt update && apt upgrade
+yum: yum update
+pacman: pacman -Syu
+C. Removing software
+
+apt: apt remove <package>
+yum: yum remove <package>
+pacman: pacman -R <package>
+III. Package dependency management
+A. Overview
+
+Package management systems handle dependencies automatically
+Ensure that required libraries and components are installed and compatible
+B. Dependency management examples
+
+apt: apt-cache depends <package>
+yum: yum deplist <package>
+pacman: pactree -r <package>
+IV. Working with package management systems in Rust
+
+Currently, there is no direct way to interact with package management systems like apt, yum, or pacman through Rust. However, you can use the "Command" module from the standard library to execute package management commands as a workaround.
+
+Here's an example of how to use the "Command" module to install a package using apt:
+
+    use std::process::Command;
+
+    fn main() {
+        let package = "htop";
+        let install_output = Command::new("apt")
+            .arg("install")
+            .arg("-y")
+            .arg(package)
+            .output()
+            .expect("Failed to execute command");
+
+        println!("Output: {:?}", String::from_utf8_lossy(&install_output.stdout));
+    }
+
+In this example, we use the "Command" module to execute the "apt install" command to install the "htop" package. Please note that this program must be run as root or with sudo privileges to perform package installation.
+
+In conclusion, package management systems like apt, yum, and pacman are essential tools for managing software installation, updates, and dependencies on Unix systems. While there are no direct Rust libraries for interacting with these package management systems, you can use the "Command" module from the standard library to execute package management commands in your Rust programs.

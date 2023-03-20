@@ -1,0 +1,288 @@
+Lisp has a powerful Object-Oriented Programming system called CLOS (Common Lisp
+Object System). CLOS is a multi-paradigm programming system that can be used
+for object-oriented, procedural, and functional programming.
+
+In CLOS, objects are represented as instances of classes, which are defined
+using the "defclass" form. A class defines the structure and behavior of its
+instances, including their attributes (called slots) and methods.
+
+Here is an example of defining a simple object in CLOS:
+
+		(defclass person ()
+		  ((name :accessor person-name)
+		   (age :accessor person-age)))
+
+In this example, we define a class called "person" with two slots: "name" and
+"age". The "name" slot has an accessor method called "person-name", and the
+"age" slot has an accessor method called "person-age".
+
+This class can be used to create instances of "person" objects, which have a
+name and an age:
+
+		(defvar john (make-instance 'person :name "John Smith" :age 35))
+		(person-name john) ;; returns "John Smith"
+		(person-age john) ;; returns 35
+
+In this example, we create an instance of the "person" class called "john" with
+a name of "John Smith" and an age of 35. We then use the accessor methods to
+retrieve the name and age of the "john" object.
+
+
+Methods are functions that operate on instances of classes. They are defined
+using the "defmethod" form, which associates a method with a generic function.
+Generic functions are used to dispatch methods based on the class of their
+arguments, allowing for polymorphism.
+
+		(defclass rectangle ()
+		  ((width :accessor rectangle-width)
+		   (height :accessor rectangle-height)))
+
+		(defmethod rectangle-area ((r rectangle))
+		  (* (rectangle-width r) (rectangle-height r)))
+
+		(defmethod rectangle-perimeter ((r rectangle))
+		  (* 2 (+ (rectangle-width r) (rectangle-height r))))
+
+In this example, we define a class called "rectangle" with two slots: "width"
+and "height". We also define two methods for this class: "rectangle-area" and
+"rectangle-perimeter".
+
+The "rectangle-area" method calculates the area of a rectangle by multiplying
+its width and height. The "rectangle-perimeter" method calculates the perimeter
+of a rectangle by adding its width and height, and then multiplying the result
+by 2.
+
+These methods can be called on instances of the "rectangle" class:
+
+		(defvar r (make-instance 'rectangle :width 5 :height 3))
+		(rectangle-area r) ;; returns 15
+		(rectangle-perimeter r) ;; returns 16
+
+In this example, we create an instance of the "rectangle" class called "r" with
+a width of 5 and a height of 3. We then use the "rectangle-area" and
+"rectangle-perimeter" methods to calculate the area and perimeter of the "r"
+rectangle.
+
+Overall, this simple example demonstrates how CLOS can be used to define
+classes with methods that operate on instances of the class. By defining
+methods on classes, we can encapsulate behavior and create more modular and
+reusable code.
+
+Inheritance is supported in CLOS, allowing classes to be derived from other
+classes and inherit their attributes and methods. CLOS supports multiple
+inheritance, meaning that a class can inherit from more than one parent class.
+
+		(defclass shape ()
+		  ((x :accessor shape-x)
+		   (y :accessor shape-y)))
+
+		(defclass circle (shape)
+		  ((radius :accessor circle-radius)))
+
+		(defmethod circle-area ((c circle))
+		  (* pi (expt (circle-radius c) 2)))
+
+In this example, we define a class called "shape" with two slots, "x" and "y".
+We then define a subclass of "shape" called "circle" with an additional slot
+called "radius". We also define a method called "circle-area" that calculates
+the area of a circle by multiplying pi by the square of its radius.
+
+Instances of the "circle" class inherit the "x" and "y" slots from the "shape"
+class. Here's an example of creating an instance of the "circle" class:
+
+		(defvar c (make-instance 'circle :x 0 :y 0 :radius 5))
+
+In this example, we create an instance of the "circle" class called "c" with an
+x-coordinate of 0, a y-coordinate of 0, and a radius of 5. The "x" and "y"
+slots are inherited from the "shape" class.
+
+Now, here's an example of multiple inheritance in CLOS:
+
+		(defclass mammal ()
+		  ((fur-color :accessor mammal-fur-color)
+		   (num-legs :accessor mammal-num-legs)))
+
+		(defclass bird ()
+		  ((feather-color :accessor bird-feather-color)
+		   (wing-span :accessor bird-wing-span)))
+
+		(defclass bat (mammal bird)
+		  ((sonar :accessor bat-sonar)))
+
+		(defmethod fly ((b bat))
+		  (format t "The bat flies with a wingspan of ~A" (bird-wing-span b)))
+
+In this example, we define two classes: "mammal" and "bird". We then define a
+subclass of both "mammal" and "bird" called "bat" with an additional slot
+called "sonar". We also define a method called "fly" that prints out how the
+bat flies.
+
+Instances of the "bat" class inherit the slots from both the "mammal" and
+"bird" classes. Here's an example of creating an instance of the "bat" class:
+
+		(defvar b (make-instance 'bat 
+			:fur-color 'brown 
+			:num-legs 2 
+			:feather-color 'black 
+			:wing-span 15 
+			:sonar 'true))
+
+In this example, we create an instance of the "bat" class called "b" with a
+brown fur color, two legs, black feather color, a wingspan of 15, and sonar
+capabilities. The slots "fur-color", "num-legs", "feather-color", and
+"wing-span" are inherited from the "mammal" and "bird" classes, while the
+"sonar" slot is specific to the "bat" class.
+
+Overall, this example demonstrates how CLOS can be used to define classes with
+multiple inheritance, allowing us to combine the properties and behavior of
+multiple classes into a single subclass.
+
+Polymorphism is another important feature of CLOS. Polymorphism allows methods
+to be defined generically, so that they can be applied to instances of multiple
+classes that share the same method name and argument list. This allows for more
+flexible and reusable code.
+
+Polymorphism in Lisp can be achieved through the use of CLOS and method
+dispatch. Here's an example of polymorphism in Lisp:
+
+		(defclass animal ()
+		  ((name :accessor animal-name)
+		   (age :accessor animal-age)))
+
+		(defmethod speak ((a animal))
+		  (format t "The ~A makes a noise." (class-of a)))
+
+		(defclass dog (animal)
+		  ((breed :accessor dog-breed)))
+
+		(defmethod speak ((d dog))
+		  (format t "The ~A barks." (dog-breed d)))
+
+		(defclass cat (animal)
+		  ((color :accessor cat-color)))
+
+		(defmethod speak ((c cat))
+		  (format t "The ~A meows." (cat-color c)))
+
+In this example, we define a class called "animal" with two slots: "name" and
+"age". We then define a method called "speak" for the "animal" class that
+prints out a generic noise that the animal makes.
+
+We then define two subclasses of "animal": "dog" and "cat", with additional
+slots for "breed" and "color", respectively. We define methods for each
+subclass of "animal" that override the "speak" method of the parent class,
+printing out the specific noise that each animal makes.
+
+Here's an example of using this polymorphic behavior:
+
+		(defvar a (make-instance 'animal :name "Molly" :age 3))
+		(defvar d (make-instance 'dog :name "Rufus" :age 5 :breed "Labrador"))
+		(defvar c (make-instance 'cat :name "Whiskers" :age 2 :color "Calico"))
+
+		(speak a) ;; prints "The ANIMAL class makes a noise."
+		(speak d) ;; prints "The Labrador barks."
+		(speak c) ;; prints "The Calico meows."
+
+In this example, we create instances of the "animal", "dog", and "cat" classes,
+and then call the "speak" method on each instance. The "speak" method
+dispatches to the appropriate implementation based on the class of the object,
+resulting in different behavior for each instance.
+
+Overall, this example demonstrates how polymorphism can be achieved in Lisp
+through the use of CLOS and method dispatch. By defining methods on classes and
+using inheritance, we can create flexible and reusable code that can operate on
+objects of different types in a consistent and predictable manner.
+
+Overall, learning about CLOS and object-oriented programming in Lisp can be a
+powerful way to increase your understanding of programming concepts and improve
+your ability to write flexible and reusable code.
+
+Here are some exercises to practice Object-Oriented Programming with Lisp and
+CLOS. In each of these exercises, you will need to define classes, methods, and
+slots that take into account the specific properties and behaviors of the
+objects being modeled. By practicing object-oriented programming with Lisp and
+CLOS, you will gain a deeper understanding of object-oriented programming
+concepts and how to apply them in a functional programming language.
+
+   1. Define a class called "shape" with slots for "x", "y", "width", and "height".
+Define a method for calculating the area of a shape.
+
+   2. Define a subclass of "shape" called "rectangle" with a slot for "color". Define
+a method for calculating the perimeter of a rectangle.
+
+   3. Define another subclass of "shape" called "circle" with a slot for "radius".
+Define a method for calculating the circumference of a circle.
+
+   4. Define a generic function called "draw" that takes a shape as an argument and
+prints its properties to the console. Define methods for "draw" for both
+"rectangle" and "circle" that print the appropriate information.
+
+   5. Define a class called "bank-account" with slots for "owner", "balance", and
+"account-number". Define methods for depositing and withdrawing money from the
+account.
+
+   6. Define a subclass of "bank-account" called "savings-account" with a slot for
+"interest-rate". Define a method for calculating the interest earned on the
+account.
+
+   7. Define another subclass of "bank-account" called "checking-account" with a slot
+for "overdraft-fee". Define a method for charging the overdraft fee if the
+account balance goes below zero.
+
+   8. Define a generic function called "transfer" that takes two bank accounts as
+arguments and transfers money from one account to the other. Define methods for
+"transfer" for both "savings-account" and "checking-account" that take into
+account their specific properties.
+
+   9. Define a class called "person" with slots for "name", "age", and "address".
+Define methods for changing the person's name and address.
+
+   10. Define a subclass of "person" called "student" with slots for "student-id" and
+"major". Define a method for calculating the student's GPA.
+
+Here are some advanced exercises to further challenge your understanding of
+Object-Oriented Programming with Lisp and CLOS. In these advanced exercises,
+you will need to create more complex class hierarchies and methods that take
+into account the specific properties and behaviors of each class. By mastering
+these exercises, you will become a skilled Object-Oriented Programmer in Lisp
+and be able to apply these concepts to solve more complex problems.
+
+   1. Define a class called "vehicle" with slots for "make", "model", "year", and
+"color". Define a method for calculating the age of the vehicle based on its
+year.
+
+   2. Define a subclass of "vehicle" called "car" with slots for "seats" and
+"gas-mileage". Define a method for calculating the cost of driving a car for a
+certain distance based on its gas mileage and the cost of gas.
+
+   3. Define another subclass of "vehicle" called "bicycle" with a slot for
+"frame-material". Define a method for calculating the ideal frame size of a
+bicycle based on the rider's height.
+
+   4. Define a class called "employee" with slots for "name", "job-title", and
+"salary". Define a method for giving an employee a raise based on their job
+performance.
+
+   5. Define a subclass of "employee" called "manager" with a slot for "department".
+Define a method for calculating the total salary cost of all employees in the
+manager's department.
+
+   6. Define another subclass of "employee" called "engineer" with a slot for
+"programming-language". Define a method for calculating the number of lines of
+code written by the engineer in a given time period.
+
+   7. Define a class called "animal" with slots for "name", "species", and "age".
+Define methods for feeding the animal and checking its health.
+
+   8. Define a subclass of "animal" called "dog" with slots for "breed" and
+"trained". Define a method for training a dog to perform a certain task.
+
+   9. Define another subclass of "animal" called "cat" with a slot for "claw-length".
+Define a method for trimming the cat's claws to a safe length.
+
+   10. Define a class called "book" with slots for "title", "author",
+"publication-date", and "pages". Define methods for calculating the number of
+words and characters in the book.
+
+
+

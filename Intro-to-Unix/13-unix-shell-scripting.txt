@@ -1,0 +1,64 @@
+Lecture 13: Unix Shell Scripting
+
+I. Shell scripting basics
+A. Overview
+
+Automate repetitive tasks and create custom tools
+Supported by all Unix shells, but syntax may vary
+Portable across Unix systems
+B. Variables
+
+Declare and assign values: variable_name=value
+Access values: $variable_name or ${variable_name}
+C. Loops
+
+For loop: for variable in list; do ...; done
+While loop: while condition; do ...; done
+D. Conditionals
+
+If statement: if condition; then ...; elif condition; then ...; else ...; fi
+Case statement: case value in pattern1) ...;; pattern2) ...;; esac
+II. Writing, executing, and debugging shell scripts
+A. Writing shell scripts
+
+Start with a shebang (e.g., #!/bin/bash for Bash shell)
+Add shell commands and scripting constructs
+Save the script with a descriptive name and a .sh extension
+B. Executing shell scripts
+
+Make the script executable: chmod +x script_name.sh
+Execute the script: ./script_name.sh or bash script_name.sh
+C. Debugging shell scripts
+
+Add the -x option to the shebang: #!/bin/bash -x
+Use the set -x and set +x commands to enable/disable tracing within the script
+Echo variable values and messages to stdout: echo "Variable value: $variable"
+III. Practical shell scripting examples for network administration and software engineering
+
+A. Network administration example: Ping multiple hosts
+
+  #!/bin/bash
+
+  hosts=("example.com" "example.org" "example.net")
+
+  for host in "${hosts[@]}"; do
+      echo "Pinging $host"
+      ping -c 3 "$host"
+      echo
+  done
+
+B. Software engineering example: Build and test a Rust project
+
+    #!/bin/bash
+
+    echo "Building the Rust project"
+    cargo build
+
+    if [ $? -eq 0 ]; then
+        echo "Build successful, running tests"
+        cargo test
+    else
+        echo "Build failed, skipping tests"
+    fi
+
+In conclusion, Lecture 13 covered the basics of Unix shell scripting, including variables, loops, and conditionals. We also discussed how to write, execute, and debug shell scripts, and provided practical examples for network administration and software engineering tasks.

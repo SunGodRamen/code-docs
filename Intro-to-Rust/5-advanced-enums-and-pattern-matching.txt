@@ -1,0 +1,113 @@
+Lesson 5: Advanced Enums and Pattern Matching
+
+Enum Variants with Data
+Enum variants can store data, which allows you to create more complex types that can represent different values and behaviors. This is a powerful feature that can help you design more expressive and concise APIs.
+
+Example: Enum Variants with Data
+
+    enum SpreadsheetCell {
+        Int(i32),
+        Float(f64),
+        Text(String),
+    }
+
+    fn print_cell_value(cell: &SpreadsheetCell) {
+        match cell {
+            SpreadsheetCell::Int(value) => println!("Integer: {}", value),
+            SpreadsheetCell::Float(value) => println!("Float: {}", value),
+            SpreadsheetCell::Text(value) => println!("Text: {}", value),
+        }
+    }
+
+    fn main() {
+        let cells = vec![
+            SpreadsheetCell::Int(42),
+            SpreadsheetCell::Float(3.14),
+            SpreadsheetCell::Text(String::from("Hello")),
+        ];
+
+        for cell in &cells {
+            print_cell_value(cell);
+        }
+    }
+
+Exhaustiveness and Wildcards
+Pattern matching in Rust requires that matches are exhaustive, meaning every possible value of the matched type must be covered. This ensures that your code is safe and handles all possible cases. You can use the wildcard _ to match any value without binding it to a variable.
+
+Example: Exhaustiveness and Wildcards
+
+    enum Color {
+        Red,
+        Green,
+        Blue,
+        Unknown,
+    }
+
+    fn print_color_name(color: Color) {
+        match color {
+            Color::Red => println!("Red"),
+            Color::Green => println!("Green"),
+            Color::Blue => println!("Blue"),
+            _ => println!("Unknown color"), // The wildcard _ matches any value
+        }
+    }
+
+    fn main() {
+        let colors = vec![Color::Red, Color::Green, Color::Blue, Color::Unknown];
+        for color in colors {
+            print_color_name(color);
+        }
+    }
+
+Guards and if-let / while-let Constructs
+Guards are additional conditions in a match arm that must be met for the arm to be executed. They are specified using the if keyword followed by a condition.
+
+Example: Guards
+
+    fn describe_number(num: i32) {
+        match num {
+            x if x < 0 => println!("Negative number"),
+            x if x == 0 => println!("Zero"),
+            _ => println!("Positive number"),
+        }
+    }
+
+    fn main() {
+        let numbers = vec![-5, 0, 5];
+        for num in numbers {
+            describe_number(num);
+        }
+    }
+
+The if let construct allows you to match a single pattern and ignore the other cases. It is useful when you only care about one specific value or want to perform a simple match. The while let construct is similar but repeats the pattern matching in a loop until the pattern does not match.
+
+Example: if-let / while-let Constructs
+
+    enum Message {
+        Quit,
+        Write(String),
+    }
+
+    fn main() {
+        let msgs = vec![
+            Message::Write(String::from("Hello")),
+            Message::Quit,
+            Message::Write(String::from("World")),
+        ];
+
+        for msg in msgs {
+            if let Message::Write(text) = msg {
+                println!("Text: {}", text);
+            } else {
+                println!("Quit");
+            }
+        }
+
+        let mut optional_values = vec![Some(1), None, Some(2), None];
+
+        while let Some(Some(value)) = optional_values.pop() {
+            println!("Found a value: {}", value);
+        }
+    }
+
+This concludes our in-depth lesson on advanced enums and pattern matching in Rust.

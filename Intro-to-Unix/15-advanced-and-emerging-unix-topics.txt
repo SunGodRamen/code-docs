@@ -1,0 +1,150 @@
+Lecture 15: Advanced Unix Concepts and Emerging Technologies
+
+I. Containers and virtualization
+A. Overview
+
+Provide lightweight, portable, and isolated environments for running applications
+Improve resource efficiency and simplify deployment and management
+Popular tools: Docker and LXC (Linux Containers)
+B. Docker
+
+Platform for developing, shipping, and running containerized applications
+Uses Docker images and containers for application packaging and distribution
+Supports Linux, macOS, and Windows
+C. LXC (Linux Containers)
+
+Operating system-level virtualization for running multiple Linux systems on a single host
+More lightweight than traditional virtualization, as containers share the host kernel
+Primarily used on Linux systems
+II. Orchestration and configuration management
+A. Overview
+
+Automate the deployment, scaling, and management of applications and infrastructure
+Essential for managing complex systems and ensuring consistency and reliability
+Popular tools: Ansible, Chef, and Puppet
+B. Ansible
+
+Agentless configuration management and orchestration tool
+Uses YAML-based playbooks for declarative configuration
+Supports a wide range of platforms, including Unix, Linux, and Windows
+C. Chef
+
+Configuration management tool using Ruby-based domain-specific language (DSL)
+Uses cookbooks and recipes for defining and applying configurations
+Supports Unix, Linux, and Windows systems
+D. Puppet
+
+Configuration management tool using its own declarative language
+Uses manifests and modules for defining and applying configurations
+Supports Unix, Linux, and Windows systems
+III. Cloud computing and Unix systems
+A. Overview
+
+Cloud providers offer a wide range of services for deploying, scaling, and managing Unix-based systems and applications
+Enable on-demand provisioning of resources and pay-as-you-go pricing
+Major providers: Amazon Web Services (AWS), Google Cloud Platform (GCP), and Microsoft Azure
+B. AWS
+
+Offers various Unix-based services, such as Amazon EC2 (virtual servers) and Amazon RDS (managed databases)
+Provides SDKs and tools for managing AWS resources from Unix systems
+Supports Rust through the rusoto crate for interacting with AWS services
+C. Google Cloud
+
+Offers Unix-based services, such as Compute Engine (virtual machines) and Cloud SQL (managed databases)
+Provides SDKs and tools for managing Google Cloud resources from Unix systems
+Supports Rust through the google-cloud-sdk crate for interacting with Google Cloud services
+D. Azure
+
+Offers Unix-based services, such as Azure Virtual Machines (VMs) and Azure Database for MySQL and PostgreSQL
+Provides SDKs and tools for managing Azure resources from Unix systems
+Supports Rust through the azure_sdk_for_rust crate for interacting with Azure services
+IV. Rust examples for emerging technologies
+
+While there are no specific Rust examples for containerization and configuration management, you can use Rust to interact with cloud providers through their respective SDKs. Here's an example of listing Amazon S3 buckets using the rusoto crate:
+
+    [dependencies]
+    rusoto_core = "0.47.0"
+    rusoto_s3 = "0.47.0"
+    tokio = { version = "1.0", features = ["full"] }
+
+-----
+
+    use rusoto_core::Region;
+    use rusoto_s3::{S3, S3Client, ListBucketsRequest};
+
+    #[tokio::main]
+    async fn main() {
+        let s3_client = S3Client::new(Region::UsWest1);
+        let list_buckets_req = ListBucketsRequest::default();
+
+        match s3_client.list_buckets(list_buckets_req).await {
+            Ok(response) => {
+                println!("S3 buckets:");
+                for bucket in response.buckets.unwrap_or_default() {
+                    println!("{}", bucket.name.unwrap_or_default());
+                }
+            }
+            Err(error) => {
+                eprintln!("Error: {:?}", error);
+            }
+        }
+    }
+
+In this example, we use the rusoto_core and rusoto_s3 crates to create an Amazon S3 client and list all available buckets in the us-west-1 region. The tokio crate is used for async runtime, and the main function is annotated with #[tokio::main] to run it asynchronously.
+
+Certainly! Currently, there is no official Google Cloud SDK for Rust. However, you can interact with Google Cloud APIs using REST and the reqwest and serde_json crates. In this example, we will list the Google Cloud Storage buckets using the REST API.
+
+First, you need to create a service account and download the JSON key file from the Google Cloud Console. Set the GOOGLE_APPLICATION_CREDENTIALS environment variable to the path of the JSON key file.
+
+Add these dependencies to your Cargo.toml file:
+
+    [dependencies]
+    reqwest = { version = "0.11", features = ["json"] }
+    serde_json = "1.0"
+    tokio = { version = "1.0", features = ["full"] }
+
+Now, let's write the code to list Google Cloud Storage buckets:
+
+    use reqwest::Client;
+    use serde_json::Value;
+    use std::env;
+
+    #[tokio::main]
+    async fn main() -> Result<(), Box<dyn std::error::Error>> {
+        let project_id = "your_project_id";
+        let token = get_google_cloud_token().await?;
+        let url = format!("https://storage.googleapis.com/storage/v1/b?project={}&access_token={}", project_id, token);
+
+        let client = Client::new();
+        let response = client.get(&url).send().await?.json::<Value>().await?;
+
+        println!("Google Cloud Storage buckets:");
+        if let Some(items) = response.get("items") {
+            for item in items.as_array().unwrap() {
+                println!("{}", item.get("name").unwrap());
+            }
+        }
+
+        Ok(())
+    }
+
+    async fn get_google_cloud_token() -> Result<String, Box<dyn std::error::Error>> {
+        let client = Client::new();
+        let scopes = "https://www.googleapis.com/auth/cloud-platform";
+        let metadata_url = "http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token";
+        let token_response = client
+            .get(metadata_url)
+            .header("Metadata-Flavor", "Google")
+            .send()
+            .await?;
+
+        let token_data: Value = token_response.json().await?;
+        let token = token_data["access_token"].as_str().unwrap().to_string();
+        Ok(token)
+    }
+
+Replace "your_project_id" with your Google Cloud project ID. The get_google_cloud_token function retrieves an access token from the Google Cloud metadata service. The main function sends a request to the Google Cloud Storage API to list the buckets and prints their names.
+
+Please note that this example assumes you are running the code on a Google Cloud Compute Engine instance with the necessary API access. If you want to run the code outside of Google Cloud, you'll need to implement additional authentication steps to retrieve an access token using the service account JSON key file.
+
+In conclusion, Lecture 15 covered advanced Unix concepts and emerging technologies, such as containers, orchestration and configuration management, and cloud computing. While there are no specific Rust examples for containerization and configuration management, Rust can interact with cloud providers through their respective SDKs, as shown in the Amazon S3 example. By understanding and applying these advanced concepts and technologies, you can create more efficient, scalable, and reliable Unix-based systems for network administration and software engineering.

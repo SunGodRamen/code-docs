@@ -1,0 +1,75 @@
+Lesson 12: Unsafe Rust
+
+The Role of Unsafe Code in Rust
+Rust's safety guarantees are an essential part of the language, providing memory safety and preventing data races. However, in some cases, you may need to bypass these guarantees for performance reasons, interfacing with other languages, or working with low-level code. This is where unsafe Rust comes into play. Unsafe Rust allows you to perform operations that are not checked by the compiler, effectively taking responsibility for maintaining safety yourself.
+
+Writing and Using Unsafe Blocks
+Unsafe blocks are marked with the unsafe keyword, and they allow you to perform operations that would normally be disallowed by the compiler. Some examples of unsafe operations are dereferencing a raw pointer, calling an unsafe function or method, or accessing a mutable static variable.
+
+Example: Unsafe Block with Raw Pointers
+
+    fn main() {
+        let value: i32 = 42;
+        let ptr: *const i32 = &value as *const i32;
+
+        unsafe {
+            let deref_value = *ptr;
+            println!("Dereferenced value: {}", deref_value);
+        }
+    }
+
+In this example, we use a raw pointer to access the value of a variable. Raw pointers are inherently unsafe, so we must use an unsafe block to dereference the pointer.
+
+FFI and C Integration
+Foreign Function Interface (FFI) allows you to interface with functions written in other languages, like C. This is especially useful when you need to use existing libraries or work with low-level system calls.
+
+Example: FFI with C Integration
+
+Suppose we have a simple C library with the following code:
+
+File: my_c_lib.c
+
+    #include <stdint.h>
+
+    int32_t add(int32_t a, int32_t b) {
+        return a + b;
+    }
+
+File: my_c_lib.h
+
+    #include <stdint.h>
+
+    int32_t add(int32_t a, int32_t b);
+
+We can create a Rust program that calls the add function from this C library:
+
+File: Cargo.toml
+
+    [dependencies]
+    libc = "0.2"
+
+File: build.rs
+
+    fn main() {
+        cc::Build::new().file("my_c_lib.c").compile("my_c_lib");
+    }
+
+File: src/main.rs
+
+    use libc::{c_int, int32_t};
+
+    extern "C" {
+        fn add(a: int32_t, b: int32_t) -> int32_t;
+    }
+
+    fn main() {
+        let a: c_int = 5;
+        let b: c_int = 7;
+
+        let result: c_int = unsafe { add(a, b) };
+        println!("The result of adding {} and {} is {}", a, b, result);
+    }
+
+In this example, we use the libc crate to define the appropriate integer types and the cc crate to build the C library. We declare the add function with the extern "C" block and call it from within an unsafe block, as FFI calls are inherently unsafe.
+
+This concludes our in-depth lesson on unsafe Rust. We have covered the role of unsafe code in Rust, writing and using unsafe blocks, and FFI with C integration. Unsafe Rust allows you to perform operations that bypass the compiler's safety checks, but it requires you to take responsibility for ensuring the safety of your code.

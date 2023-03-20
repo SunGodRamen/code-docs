@@ -1,0 +1,109 @@
+Lecture 12: System Monitoring and Performance Tuning
+
+I. Introduction to system monitoring tools
+A. Overview
+
+Essential for identifying performance bottlenecks and potential issues
+Different tools target specific aspects of system performance
+B. Common system monitoring tools
+
+vmstat: Provides information about memory, processes, and CPU usage
+iostat: Monitors input/output statistics for devices and partitions
+sar: Collects and reports system activity information
+II. Analyzing system logs with syslog and logrotate
+A. syslog
+
+Default system logging daemon on Unix systems
+Collects log messages from various system components
+Configurable with the /etc/syslog.conf file
+B. logrotate
+
+Utility to manage log file rotation, compression, and removal
+Prevents log files from growing too large
+Configurable with the /etc/logrotate.conf file and per-application configuration files in /etc/logrotate.d/
+III. Performance tuning and optimization techniques
+A. Overview
+
+Improve system performance and resource utilization
+Techniques depend on the specific hardware and software environment
+B. Common performance tuning techniques
+
+Adjusting CPU and memory allocation for processes
+Configuring the I/O scheduler
+Tuning network settings for optimal throughput and latency
+IV. Working with system monitoring and performance tuning in Rust
+A. sysinfo crate for system monitoring
+
+To monitor system performance in Rust, you can use the "sysinfo" crate. Add the "sysinfo" crate to your Cargo.toml file:
+
+    [dependencies]
+    sysinfo = "0.20"
+
+Here's an example of how to use the "sysinfo" crate to gather basic system information:
+
+    use sysinfo::{System, SystemExt};
+
+    fn main() {
+        let mut system = System::new_all();
+        system.refresh_all();
+
+        println!("Total memory: {} KiB", system.get_total_memory());
+        println!("Used memory: {} KiB", system.get_used_memory());
+        println!("Free memory: {} KiB", system.get_free_memory());
+        println!("CPU load: {}%", system.get_global_processor_info().get_cpu_usage());
+    }
+
+In this example, we use the "sysinfo" crate to get information about the system's memory usage and CPU load. This information can be used to monitor system performance in real-time.
+
+B. syslog and logrotate examples
+
+As syslog and logrotate are system utilities, you don't need to use Rust-specific examples to interact with them. Instead, you can use Rust to write log messages to the syslog and then use the syslog and logrotate utilities to analyze and manage those logs.
+
+In conclusion, system monitoring and performance tuning are essential aspects of network administration and software engineering on Unix systems. Tools like vmstat, iostat, and sar help monitor system performance, while syslog and logrotate help manage system logs. Rust can be used to gather system information using the "sysinfo" crate and interact with system utilities like syslog for log management.
+
+C. Analyzing system logs in Rust using the syslog crate
+
+To interact with the syslog service in Rust, you can use the "syslog" crate. Add the "syslog" crate to your Cargo.toml file:
+
+    [dependencies]
+    syslog = "5.0"
+
+Here's an example of how to use the "syslog" crate to log messages to the syslog:
+
+    use syslog::{Facility, Formatter3164, LoggerBackend, LoggerBuilder};
+
+    fn main() {
+        let formatter = Formatter3164 {
+            facility: Facility::LOG_USER,
+            hostname: None,
+            process: "rust_syslog_example".into(),
+            pid: 0,
+        };
+
+        let logger = LoggerBuilder::new()
+            .format(formatter)
+            .open_system(LoggerBackend::Syslog)
+            .unwrap();
+
+        let _ = logger.notice("This is a notice message");
+        let _ = logger.info("This is an info message");
+        let _ = logger.err("This is an error message");
+    }
+
+In this example, we use the "syslog" crate to create a logger and send log messages with different severity levels to the syslog. These log messages can then be analyzed and managed using the syslog service and logrotate utility.
+
+D. Performance tuning in Rust
+
+While there is no universal approach to performance tuning in Rust, you can optimize your Rust applications by following best practices and using various profiling tools. Some suggestions for performance tuning in Rust include:
+
+Profile your code: Use tools like "perf" on Linux, "Instruments" on macOS, or "VTune" on Windows to identify performance bottlenecks and optimize your code accordingly.
+
+Optimize memory usage: Utilize the Rust ownership system, borrow checker, and lifetimes to manage memory efficiently.
+
+Use efficient data structures and algorithms: Select appropriate data structures and algorithms for your specific use case to improve the performance of your Rust applications.
+
+Leverage concurrency and parallelism: Rust provides built-in support for concurrency and parallelism through threads and the "async/await" mechanism. Take advantage of these features to improve the performance of your Rust applications, especially on multi-core systems.
+
+Apply compiler optimizations: Use the appropriate compiler optimization flags (e.g., -C opt-level=3 for maximum optimization) when building your Rust applications for production use.
+
+In conclusion, Lecture 12 discussed the importance of system monitoring and performance tuning in Unix systems, covering the usage of various tools such as vmstat, iostat, sar, syslog, and logrotate. In addition, we explored how Rust can be used to interact with system monitoring tools, logging, and performance optimization techniques. By understanding and applying these concepts, you can ensure that your Unix systems and Rust applications run efficiently and reliably.

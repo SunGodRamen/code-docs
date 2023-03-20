@@ -1,0 +1,165 @@
+Lesson 4: Data Structures in Rust
+
+Basic Data Structures: Structs, Enums, and Tuples
+Structs: Structs are used to group related data together. They can have named fields and methods associated with them.
+
+Example: Structs
+
+    struct Point {
+        x: i32,
+        y: i32,
+    }
+
+    impl Point {
+        fn origin() -> Self {
+            Point { x: 0, y: 0 }
+        }
+
+        fn distance(&self, other: &Point) -> f64 {
+            let dx = (other.x - self.x).pow(2);
+            let dy = (other.y - self.y).pow(2);
+            f64::sqrt((dx + dy) as f64)
+        }
+    }
+
+    fn main() {
+        let p1 = Point { x: 3, y: 4 };
+        let p2 = Point::origin();
+        let distance = p1.distance(&p2);
+        println!("Distance between p1 and p2: {}", distance);
+    }
+
+Enums: Enums are used to define a type that can have one of several variants. Each variant can have associated data.
+
+Example: Enums
+
+    enum Message {
+        Quit,
+        Move { x: i32, y: i32 },
+        Write(String),
+        ChangeColor(i32, i32, i32),
+    }
+
+    fn handle_message(msg: Message) {
+        match msg {
+            Message::Quit => println!("Quit"),
+            Message::Move { x, y } => println!("Move to x: {}, y: {}", x, y),
+            Message::Write(text) => println!("Write: {}", text),
+            Message::ChangeColor(r, g, b) => println!("Change color to R: {}, G: {}, B: {}", r, g, b),
+        }
+    }
+
+    fn main() {
+        let msg = Message::Write(String::from("Hello, world!"));
+        handle_message(msg);
+    }
+
+Tuples: Tuples are fixed-size, ordered, and heterogeneous collections of values. They are useful for grouping a small number of related values together.
+
+Example: Tuples
+
+    fn main() {
+        let color = (255, 0, 128);
+        println!("Color: R: {}, G: {}, B: {}", color.0, color.1, color.2);
+    }
+
+Collections: Vec, HashMap, and HashSet
+Vec: A Vec is a growable, ordered list of elements of the same type. It is one of the most commonly used collections in Rust.
+
+Example: Vec
+
+    fn main() {
+        let mut numbers = vec![1, 2, 3, 4, 5];
+        numbers.push(6);
+        numbers.push(7);
+
+        for number in &numbers {
+            println!("{}", number);
+        }
+    }
+
+HashMap: A HashMap is a key-value store, which provides a mapping from a set of keys to their associated values. It uses hashing to efficiently look up values based on their keys.
+
+Example: HashMap
+
+    use std::collections::HashMap;
+
+    fn main() {
+        let mut scores = HashMap::new();
+        scores.insert("Team A", 50);
+        scores.insert("Team B", 42);
+
+        let team_name = "Team A";
+        let score = scores.get(team_name);
+        println!("Score for {}: {:?}", team_name, score);
+    }
+
+HashSet: A HashSet is a collection of unique elements with no specific order. It is useful for ensuring uniqueness and performing set operations like union, intersection, and difference.
+
+Example: HashSet
+
+    use std::collections::HashSet;
+
+    fn main() {
+        let mut set: HashSet<i32> = [1, 2, 3, 4, 5].iter().cloned().collect();
+        set.insert(6);
+
+        if !set.contains(&7) {
+            println!("7 is not in the set");
+        }
+
+        for number in &set {
+            println!("{}", number);
+        }
+    }
+
+In this example, we create a HashSet from an array, insert a new element into it, check if an element is contained in the set, and iterate over its elements.
+
+Pattern Matching and Destructuring
+Pattern matching is a powerful feature in Rust, allowing you to destructure and match complex data structures. It is commonly used with enums, structs, and tuples. You can use the match keyword to perform pattern matching or the if let and while let constructs for more concise matching.
+
+Example: Pattern Matching with Enums
+
+    enum Message {
+        Quit,
+        Move { x: i32, y: i32 },
+        Write(String),
+        ChangeColor(i32, i32, i32),
+    }
+
+    fn handle_message(msg: Message) {
+        match msg {
+            Message::Quit => println!("Quit"),
+            Message::Move { x, y } => println!("Move to x: {}, y: {}", x, y),
+            Message::Write(text) => println!("Write: {}", text),
+            Message::ChangeColor(r, g, b) => println!("Change color to R: {}, G: {}, B: {}", r, g, b),
+        }
+    }
+
+    fn main() {
+        let msg = Message::Write(String::from("Hello, world!"));
+        handle_message(msg);
+    }
+
+Example: Destructuring Structs and Tuples
+
+    struct Point {
+        x: i32,
+        y: i32,
+    }
+
+    fn main() {
+        let p = Point { x: 3, y: 4 };
+
+        // Destructuring a struct
+        let Point { x, y } = p;
+        println!("x: {}, y: {}", x, y);
+
+        let tuple = (1, "two", 3.0);
+
+        // Destructuring a tuple
+        let (a, b, c) = tuple;
+        println!("a: {}, b: {}, c: {}", a, b, c);
+    }
+
+This concludes our in-depth lesson on data structures in Rust. We've covered basic data structures like structs, enums, and tuples, as well as collections like Vec, HashMap, and HashSet. Additionally, we've explored pattern matching and destructuring, which enable efficient and expressive handling of complex data types. These concepts are essential for writing idiomatic and efficient Rust code. In the following lectures, we will dive into concurrency, modules, and other advanced topics in Rust.

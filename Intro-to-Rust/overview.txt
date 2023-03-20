@@ -1,0 +1,77 @@
+Lecture 1: Introduction to Rust
+- Overview of Rust
+- Rust's design goals and unique features
+- Setting up a Rust development environment
+- Basic syntax and Hello World program
+
+Lecture 2: Rust's Ownership System
+- Ownership and borrowing
+- Move semantics
+- Lifetimes and their annotations
+
+Lecture 3: Error Handling in Rust
+- The Result and Option types
+- Error propagation and handling
+- Custom error types and the std::error::Error trait
+
+Lecture 4: Data Structures in Rust
+- Basic data structures: structs, enums, and tuples
+- Collections: Vec, HashMap, HashSet
+- Pattern matching and destructuring
+
+Lecture 5: Advanced Enums and Pattern Matching
+- Enum variants with data
+- Exhaustiveness and wildcards
+- Guards and if-let / while-let constructs
+
+Lecture 6: Functions, Closures, and Iterators
+- Functions and methods
+- Higher-order functions and closures
+- Iterators and the Iterator trait
+
+Lecture 7: Modules and Packages
+- Organizing code with modules
+- Creating and using libraries
+- The Cargo package manager and crates.io
+
+Lecture 8: Concurrency in Rust
+- Concurrency vs parallelism
+- The Rust memory model and safety guarantees
+- Threads and message passing with channels
+
+Lecture 9: Asynchronous Programming
+- Introduction to async/await
+- Futures and the Executor model
+- Building asynchronous applications with tokio
+
+Lecture 10: Traits and Generics
+- Defining and implementing traits
+- Generics and associated types
+- Trait objects and dynamic dispatch
+
+Lecture 11: Smart Pointers and Interior Mutability
+- Reference counting with Rc and Arc
+- Interior mutability with RefCell and Mutex
+- Implementing custom smart pointers
+
+Lecture 12: Unsafe Rust
+- The role of unsafe code in Rust
+- Writing and using unsafe blocks
+- FFI and C integration
+
+Lecture 13: Macros and Metaprogramming
+- Introduction to Rust macros
+- Declarative macros with macro_rules!
+- Procedural macros and custom derive
+
+Lecture 14: Performance Optimization in Rust
+- Profiling Rust applications
+- Benchmarking with Criterion.rs
+- SIMD and other low-level optimizations
+
+Lecture 15: Rust Ecosystem and Community
+- Popular libraries and frameworks
+- Contributing to open-source Rust projects
+- Rust community resources and events
+
+

@@ -1,0 +1,153 @@
+
+		Lisp Libraries and Tools
+
+Quicklisp is a package manager for Common Lisp that simplifies the process of
+downloading, installing, and managing external libraries. It makes it easy to
+find, download, and install a wide range of Lisp libraries, and ensures that
+all dependencies are properly managed.
+
+To use Quicklisp, you first need to download and install it. This can be done
+by following the instructions on the Quicklisp website
+(https://www.quicklisp.org/beta/). Once Quicklisp is installed, you can use it
+to manage your Lisp projects.
+
+To download a library using Quicklisp, you can use the (ql:quickload
+"library-name") function. This will download the specified library and all of
+its dependencies, and load it into your Lisp environment. For example, to
+download and load the cl-ppcre library (which provides Perl-compatible regular
+expressions for Lisp), you can use the following command:
+
+		(ql:quickload "cl-ppcre")
+
+If the library is not already installed on your system, Quicklisp will download
+it and install it for you. If the library has dependencies that are not
+installed, Quicklisp will also download and install those dependencies.
+
+You can also use Quicklisp to manage dependencies for your own Lisp projects.
+To do this, you need to create a .asd file for your project that lists all of
+the required libraries. Quicklisp will then use this file to download and
+install all of the required libraries and their dependencies.
+
+Quicklisp provides a number of other useful functions for managing packages and
+dependencies. For example, you can use (ql:list-all) to list all of the
+available libraries in the Quicklisp repository, and (ql:system-apropos
+"keyword") to search for libraries that match a particular keyword.
+
+Overall, Quicklisp makes it easy to manage external libraries and dependencies
+in Common Lisp, and is an essential tool for Lisp developers.
+
+Here's an example of how to use Quicklisp to manage dependencies in a Common Lisp application:
+
+		;; Load Quicklisp
+		(load (merge-pathnames "quicklisp/setup.lisp" (user-homedir-pathname)))
+		
+		;; Install dependencies
+		(ql:quickload '(:my-library :my-other-library))
+		
+		;; Use the installed libraries
+		(use-package :my-library)
+		(use-package :my-other-library)
+		
+		;; Define and use functions from the libraries
+		(defun my-function (arg)
+		  (my-library-function arg))
+		
+		(my-other-library-function)
+
+In this example, we first load Quicklisp by calling load with the path to the
+setup.lisp file provided by Quicklisp. We then install our application's
+dependencies by calling ql:quickload with a list of package names. Finally, we
+use the use-package macro to import symbols from the installed packages, and
+define and use functions from those packages as needed.
+
+Note that Quicklisp will automatically download and install any dependencies of
+the packages listed in ql:quickload. If any required libraries are missing,
+Quicklisp will prompt the user to download and install them. This makes it easy
+to manage dependencies and ensure that all required libraries are properly
+installed.
+
+
+Emacs and SLIME (Superior Lisp Interaction Mode) are the standard development
+environment for Common Lisp. SLIME provides a set of features that enable
+efficient and productive Common Lisp programming, such as code completion,
+syntax highlighting, and interactive debugging.
+
+SLIME's code completion feature makes it easy to browse and navigate the
+functions and symbols defined in the code. Syntax highlighting helps in
+visually distinguishing between different elements of the code, making it easy
+to read and understand. Additionally, SLIME's interactive debugging
+capabilities make it easy to locate and fix errors in the code.
+
+To use SLIME, one needs to have Emacs installed, as well as the SLIME package.
+Once installed, a user can start a Lisp REPL session and connect it to Emacs
+using SLIME. From there, a user can interactively evaluate Lisp expressions,
+debug code, and browse the documentation of libraries and functions.
+
+One of the most important features of SLIME is its interactive debugging
+capabilities. When an error occurs in the code, SLIME automatically enters the
+debugger and presents the user with a detailed view of the stack trace, showing
+where the error occurred and how the program reached that point. From there, a
+user can use the REPL to evaluate expressions, inspect variables, and step
+through the code to pinpoint the cause of the error.
+
+In summary, Emacs and SLIME provide a powerful development environment for
+Common Lisp that includes code completion, syntax highlighting, and interactive
+debugging. These features make it easier to write, debug, and maintain Lisp
+code, and can greatly improve a developer's productivity.
+
+
+Configure Emacs and SLIME
+and start a project:
+
+Here's a step-by-step guide on how to configure Emacs and SLIME for a new
+Common Lisp project:
+
+   1. Install Emacs: If you haven't already, download and install Emacs for your
+operating system. You can find installation instructions on the official Emacs
+website.
+
+   2. Install Quicklisp: Follow the instructions on the Quicklisp website to download
+and install Quicklisp. This package manager will make it easy to install
+external libraries for your Common Lisp project.
+
+   3. Install SLIME: Open a terminal and enter the command sbcl --load
+~/quicklisp/setup.lisp. This will start a Lisp REPL and load Quicklisp. Once
+Quicklisp has loaded, enter the command (ql:quickload "quicklisp-slime-helper")
+to install the SLIME package.
+
+   4. Configure Emacs: Open your Emacs configuration file, which is typically located
+at ~/.emacs.d/init.el. Add the following lines to your configuration file:
+
+		(require 'package)
+		(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+		
+		(setq inferior-lisp-program "sbcl")
+		(add-to-list 'load-path "~/.emacs.d/slime/")
+		(require 'slime-autoloads)
+		(slime-setup '(slime-fancy))
+
+The first two lines add the MELPA package archive to Emacs so that you can
+easily install packages. The next two lines set up the path to the Lisp
+interpreter, and add the SLIME package to Emacs. The last line sets up some
+additional features for SLIME.
+
+   5. Start a new project: To start a new Common Lisp project with SLIME, first
+create a new directory for your project. In a terminal, navigate to the
+directory and enter the command sbcl --load ~/quicklisp/setup.lisp. This will
+start a Lisp REPL and load Quicklisp. Once Quicklisp has loaded, enter the
+command (ql:quickload "your-project-name") to load any required libraries for
+your project.
+
+   6. Open your project in Emacs: Open Emacs and press Ctrl-X Ctrl-F to open a new
+file. Navigate to your project directory and create a new file with the .lisp
+extension. This will open the file in Lisp mode. Press Ctrl-C Ctrl-K to compile
+the file and check for any syntax errors.
+
+   7. Connect to SLIME: In the same file, press Ctrl-C Ctrl-Z to start a Lisp REPL in
+a new Emacs window. This will automatically connect to the SLIME server running
+in the terminal. You can now interact with your project using the REPL and the
+Emacs editor.
+
+With these steps, you should now have a fully functional development
+environment for Common Lisp projects with Emacs and SLIME.
+

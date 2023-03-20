@@ -1,0 +1,121 @@
+Lecture 10: Unix System Security
+
+I. Unix security principles and best practices
+A. Security principles
+
+Least privilege: Users and processes should have the minimum privileges necessary
+Defense in depth: Use multiple layers of security
+Regularly update and patch systems
+Encrypt data at rest and in transit
+B. Best practices
+
+Use strong, unique passwords
+Disable unnecessary services
+Enable security features (e.g., SELinux, AppArmor)
+Monitor logs and set up intrusion detection systems
+II. Firewall configuration with iptables and ufw
+A. iptables
+
+Default Linux firewall utility
+Uses a rule-based system to filter network traffic
+Syntax can be complex
+B. ufw (Uncomplicated Firewall)
+
+Simplifies iptables configuration
+Easy-to-use command-line interface
+Suitable for most use cases
+C. Configuring iptables and ufw
+
+Basic iptables rules: iptables -A INPUT -p tcp --dport 22 -j ACCEPT, iptables -A INPUT -j DROP
+Basic ufw rules: ufw allow 22/tcp, ufw enable
+III. SSH security and key management
+A. SSH key-based authentication
+
+More secure than password-based authentication
+Uses public and private key pairs
+Steps: generate a key pair, copy the public key to the remote server, disable password authentication
+B. SSH key management
+
+Use ssh-agent to manage keys
+Use ssh-add to add keys to the agent
+Protect private keys with strong passphrases
+IV. Working with Unix system security in Rust
+A. SSH key-based authentication with the "ssh2" crate
+
+To use SSH key-based authentication with the "ssh2" crate, you need to modify the SSH client example provided in Lecture 9.
+
+    use ssh2::Session;
+    use std::fs::File;
+    use std::io::prelude::*;
+    use std::net::TcpStream;
+    use std::path::Path;
+
+    fn main() {
+        let username = "your-username";
+        let host = "example.com";
+        let port = 22;
+
+        let tcp = TcpStream::connect((host, port)).unwrap();
+        let mut session = Session::new().unwrap();
+        session.set_tcp_stream(tcp);
+        session.handshake().unwrap();
+
+        let private_key_path = Path::new("path/to/your/private/key");
+        let mut private_key_file = File::open(&private_key_path).unwrap();
+        let mut private_key = String::new();
+        private_key_file.read_to_string(&mut private_key).unwrap();
+
+        session.userauth_pubkey_file(username, None, &private_key_path, None).unwrap();
+
+        assert!(session.authenticated());
+
+        // (Continue with the rest of the SSH client example from Lecture 9)
+    }
+
+In this example, we modify the SSH client to use key-based authentication instead of a password. We read the private key from a file and use the userauth_pubkey_file method to authenticate with the remote server.
+
+In conclusion, Unix system security is a critical aspect of network administration and software engineering. Security principles and best practices include least privilege, defense in depth, and strong authentication. Firewalls can be configured with iptables or ufw, and SSH security can be improved with key-based authentication and key management. In Rust, you can implement SSH key-based authentication using the "ssh2" crate, as shown in the example provided.
+
+V. Implementing a basic firewall in Rust
+
+You can use the "iptables" crate to manage iptables rules in Rust. First, add the "iptables" crate to your Cargo.toml file:
+
+    [dependencies]
+    iptables = "0.6"
+
+Here's an example of how to use the "iptables" crate to create a simple firewall:
+
+    use iptables::IPTables;
+    use std::net::Ipv4Addr;
+
+    fn main() -> Result<(), Box<dyn std::error::Error>> {
+        let mut ipt = IPTables::new()?;
+        let chain = "INPUT";
+        let allow_port = 22;
+
+        // Flush existing rules
+        ipt.flush_chain(chain)?;
+
+        // Allow established connections
+        ipt.append(
+            chain,
+            &format!("-m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT"),
+        )?;
+
+        // Allow incoming SSH traffic
+        ipt.append(
+            chain,
+            &format!("-p tcp --dport {} -s {} -j ACCEPT", allow_port, Ipv4Addr::new(192, 168, 1, 1)),
+        )?;
+
+        // Drop all other incoming traffic
+        ipt.append(chain, "-j DROP")?;
+
+        println!("Firewall rules applied.");
+
+        Ok(())
+    }
+
+In this example, we use the "iptables" crate to create a simple firewall that allows incoming SSH traffic from a specific IP address (192.168.1.1) and drops all other incoming traffic. You can customize the rules as needed for your specific use case.
+
+In conclusion, Unix system security plays a crucial role in network administration and software engineering. Understanding and implementing security principles, best practices, and tools such as firewalls and secure SSH connections are essential to maintain a secure environment. Rust can be used to implement security features and interact with Unix security tools, such as working with iptables through the "iptables" crate or managing SSH connections securely using the "ssh2" crate.

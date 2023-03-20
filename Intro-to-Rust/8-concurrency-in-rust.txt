@@ -1,0 +1,43 @@
+Lesson 8: Concurrency in Rust
+
+Concurrency vs Parallelism
+Concurrency and parallelism are related concepts that deal with executing multiple tasks simultaneously. Concurrency is when multiple tasks are making progress, but not necessarily running at the same time. Parallelism, on the other hand, is when multiple tasks are executed simultaneously using multiple processing units (e.g., CPU cores).
+
+The Rust Memory Model and Safety Guarantees
+The Rust memory model is designed to prevent data races and other concurrency-related issues, making it easier to write safe concurrent code. This is achieved through Rust's ownership system and strict compile-time checks. The ownership system ensures that only one mutable reference to a piece of data exists at a time, or multiple immutable references, but never both. This helps to eliminate data races and maintain memory safety.
+
+Threads and Message Passing with Channels
+Rust provides threads as a way to run code concurrently. Threads can be created using the std::thread::spawn function, which takes a closure as an argument. To communicate between threads, Rust provides channels, which can be used to send and receive messages.
+
+Example: Creating Threads and Using Channels
+
+    use std::sync::mpsc;
+    use std::thread;
+    use std::time::Duration;
+
+    fn main() {
+        // Create a channel for communication between threads
+        let (tx, rx) = mpsc::channel();
+
+        // Spawn a new thread
+        let handle = thread::spawn(move || {
+            for i in 1..5 {
+                println!("Thread: {}", i);
+                thread::sleep(Duration::from_millis(500));
+                // Send a message to the main thread
+                tx.send(i).unwrap();
+            }
+        });
+
+        // Receive messages from the spawned thread
+        for received in rx {
+            println!("Main: Received {}", received);
+        }
+
+        // Wait for the spawned thread to finish
+        handle.join().unwrap();
+    }
+
+This example demonstrates how to create a new thread and use a channel for communication. The spawned thread sends messages to the main thread, which receives and prints them. The main thread also waits for the spawned thread to finish before exiting.
+
+This concludes our in-depth lesson on concurrency in Rust. We've covered the differences between concurrency and parallelism, the Rust memory model with its safety guarantees, and threads with message passing using channels. These concepts are fundamental for writing efficient, safe concurrent code in Rust.

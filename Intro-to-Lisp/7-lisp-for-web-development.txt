@@ -1,0 +1,207 @@
+
+		Lisp for Web Development
+
+Lisp has a growing presence in web development, with various frameworks and
+libraries available for creating web applications. Here are some of the key
+capabilities of Lisp in web development:
+
+Web frameworks for Lisp: There are several web frameworks available for Lisp,
+including Hunchentoot, Weblocks, and Caveman2. These frameworks provide a set
+of tools and conventions for building web applications, including handling HTTP
+requests and responses, routing, session management, and handling various types
+of data.
+
+Generating HTML with Lisp: Lisp's powerful macros and functional programming
+capabilities make it a great language for generating HTML code dynamically.
+This can be done with tools like Parenscript, which allows Lisp code to be
+compiled into JavaScript, or with libraries like CL-WHO, which provides a DSL
+for generating HTML markup in a concise and expressive manner.
+
+Writing RESTful web services with Lisp: Lisp's flexibility and expressiveness
+make it a great language for building RESTful web services. This can be done
+using frameworks like Hunchentoot, which provides support for creating HTTP
+handlers and routing requests to appropriate functions, or with libraries like
+Weblocks, which provides a full-stack web framework with support for handling
+data, sessions, and authentication.
+
+Overall, Lisp's powerful language features make it a great choice for web
+development, especially for applications that require a high level of
+customization and flexibility.
+
+Web frameworks such as Hunchentoot and Weblocks make it easy to build web
+applications with Lisp by providing a set of tools and abstractions for
+handling HTTP requests and generating responses.
+
+Hunchentoot is a popular web server and web application framework for Lisp. It
+allows developers to define URL routes using macros, and handles HTTP request
+and response processing transparently. Here is an example of a simple
+Hunchentoot application that responds to a GET request with a plain text
+message:
+
+		(require :hunchentoot)
+		
+		(defun hello-world-handler (request)
+		  (with-output-to-string (stream)
+		    (format stream "Hello, world!")))
+		
+		(defun start-server ()
+		  (hunchentoot:start (make-instance 'hunchentoot:acceptor
+		                                     :port 8080
+		                                     :name "test"
+		                                     :document-root nil
+		                                     :error-log-file nil
+		                                     :access-log-file nil
+		                                     :dispatch-table '(("/*" . hello-world-handler))))))
+
+In this example, we define a handler function hello-world-handler that simply
+writes the message "Hello, world!" to an output stream. We then define a
+function start-server that starts the Hunchentoot server on port 8080 and
+registers the hello-world-handler function as the handler for all URL paths.
+
+Weblocks is another popular web framework for Lisp that provides a rich set of
+features for building web applications, including support for client-side
+scripting with AJAX and JavaScript. Here is an example of a simple Weblocks
+application that responds to a GET request with an HTML page:
+				
+		(require :weblocks)
+		
+		(defclass hello-world-page (weblocks:page)
+		  ((message :initarg :message :accessor message)))
+		
+		(defmethod initialize-instance :after ((page hello-world-page) &key &allow-other-keys)
+		  (setf (message page) "Hello, world!"))
+		
+		(defmethod weblocks:render-body ((page hello-world-page))
+		  (weblocks:with-html-output-to-string (*html-stream*)
+		    (:html
+		     (:head
+		      (:title "Hello, world!"))
+		     (:body
+		      (:h1 (message page))))))
+		
+		(defun start-server ()
+		  (weblocks:start
+		   (make-instance 'weblocks:app
+		                  :name "test"
+		                  :dispatch-table '((:default . hello-world-page))
+		                  :port 8080
+		                  :external-format :utf-8)))
+
+In this example, we define a class hello-world-page that extends the
+weblocks:page class and defines a slot for a message to be displayed on the
+page. We also define a method that sets the message to "Hello, world!" when a
+new instance of the page class is initialized.
+
+We then define a method weblocks:render-body that generates the HTML content of
+the page using a weblocks:with-html-output-to-string macro. This macro provides
+a convenient way to generate HTML content using Lisp expressions.
+
+Finally, we define a function start-server that starts the Weblocks server on
+port 8080 and registers the hello-world-page class as the handler for all URL
+paths.
+
+Overall, web frameworks such as Hunchentoot and Weblocks make it easy to build
+web applications with Lisp by providing a rich set of tools and abstractions
+for handling HTTP requests and generating responses. By leveraging the power
+and flexibility of Lisp, developers can build web applications that are highly
+modular, scalable, and efficient.
+
+
+Examples:
+Here's an example of how to generate HTML using the CL-WHO library:
+
+		;; Load the CL-WHO library
+		(ql:quickload :cl-who)
+		
+		;; Define a simple HTML page using CL-WHO
+		(cl-who:with-html-output-to-string (s)
+		  (:html
+		    (:head
+		      (:title "My Page"))
+		    (:body
+		      (:h1 "Welcome!")
+		      (:p "This is my first Lisp-generated HTML page.")
+		      (:p "It is so easy to create dynamic content with Lisp!"))))
+
+Here's an example of how to generate HTML using the Closure-Template library:
+		
+		;; Load the Closure-Template library
+		(ql:quickload :cl-closure-template)
+		
+		;; Define a template using Closure-Template
+		(defvar *my-template*
+		  (cl-closure-template:compile-template
+		    "Welcome to my page!
+		    <h1>{$title$}</h1>
+		    <p>{$content$}</p>"))
+		
+		;; Use the template to generate HTML
+		(cl-closure-template:fill-template *my-template*
+		  '((title . "My Page")
+		    (content . "This is my first Lisp-generated HTML page.
+		                It is so easy to create dynamic content with Lisp!")))
+
+And finally, here's an example of how to generate HTML using the HTML-TEMPLATE library:
+		
+		;; Load the HTML-TEMPLATE library
+		(ql:quickload :html-template)
+		
+		;; Define a template using HTML-TEMPLATE
+		(defparameter *my-template*
+		  (html-template:make-template "<html>
+		                                 <head><title>$title$</title></head>
+		                                 <body>
+		                                   <h1>Welcome to my page!</h1>
+		                                   <p>$content$</p>
+		                                 </body>
+		                               </html>"))
+		
+		;; Use the template to generate HTML
+		(html-template:merge *my-template*
+		  '((title . "My Page")
+		    (content . "This is my first Lisp-generated HTML page.
+		                It is so easy to create dynamic content with Lisp!")))
+
+Exercises:
+Exercise 1: Building a web application using Hunchentoot
+
+In this exercise, you will build a web application using the Hunchentoot web
+framework. The application should have the following features:
+
+  1. A homepage that displays a list of blog posts
+  2. A blog post detail page that displays the full content of a blog post
+  3. A form for creating a new blog post
+
+Here are some steps to follow:
+  5. Install Hunchentoot and any other libraries you need for this exercise.
+  6. Define a blog-post class with properties such as title, content, and date.
+  7. Define a blog class with a posts slot that contains a list of blog-post objects.
+  8. Define routes for the homepage, blog post detail page, and new blog post form using Hunchentoot's routing API.
+  9. Define handlers for each route that generate the appropriate HTML using a library such as CL-WHO or HTML-TEMPLATE.
+  10. Add functionality to the new blog post form so that it creates a new blog-post object and adds it to the blog's posts slot.
+  11. Start the Hunchentoot server and test your application in a web browser.
+
+
+Exercise 2: Building a RESTful API using Caveman2
+
+In this exercise, you will build a RESTful API using the Caveman2 web
+framework. The API should have the following endpoints:
+
+/users: returns a list of users
+/users/:id: returns the user with the specified id
+/users: creates a new user
+/users/:id: updates the user with the specified id
+/users/:id: deletes the user with the specified id
+
+Here are some steps to follow:
+  1. Install Caveman2 and any other libraries you need for this exercise. 
+  2. Define a user class with properties such as name, email, and password. 
+  3. Define a user-database class with methods for creating, reading, updating, and deleting users. 
+  4. Define routes for each API endpoint using Caveman2's routing API. 
+  5. Define handlers for each route that interact with the user-database to perform the appropriate CRUD operations. 
+  6. Use a library such as CL-JSON or JSOWN to generate JSON responses for each endpoint. 
+  7. Start the Caveman2 server and test your API using a tool such as Postman or cURL. 
+
+Note: Caveman2 is just one of many web frameworks available for Lisp. You can
+use any other framework that you are comfortable with for this exercise.
+

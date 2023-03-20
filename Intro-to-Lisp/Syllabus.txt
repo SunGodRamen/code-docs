@@ -1,0 +1,65 @@
+Course Title: Lisp Programming Language
+
+Course Description: This course will provide an in-depth study of the Lisp programming language, covering its history, syntax, data structures, programming paradigms, and advanced features. Students will learn how to write Lisp programs, use the REPL, and work with a variety of libraries and tools.
+
+Prerequisites: CS106B or equivalent programming experience in a language such as Python, Java, or C++. Familiarity with functional programming concepts is recommended but not required.
+
+Course Outline:
+
+Week 1: Introduction to Lisp
+
+Lisp syntax and semantics
+Lisp data structures (lists, atoms, and cons cells)
+The REPL and basic Lisp programming constructs
+Week 2: Functional Programming with Lisp
+
+Higher-order functions
+Closures and lexical scoping
+Recursion and tail recursion
+Pure functions and avoiding side effects
+Week 3: Object-Oriented Programming with Lisp
+
+Lisp's CLOS (Common Lisp Object System)
+Defining classes and methods
+Inheritance and polymorphism
+Week 4: Macros in Lisp
+
+Lisp's macro system
+Writing and using macros
+Quasiquotation and unquoting
+Week 5: Metaprogramming with Lisp
+
+Code generation and evaluation
+Homoiconicity and metaprogramming in Lisp
+Lisp macros and metaclasses
+Week 6: Lisp for AI
+
+Lisp's history in AI research
+Natural language processing with Lisp
+Machine learning and Lisp libraries (e.g., Weka)
+Week 7: Lisp for Web Development
+
+Web frameworks for Lisp (e.g., Hunchentoot, Weblocks)
+Generating HTML with Lisp
+Writing RESTful web services with Lisp
+Week 8: Lisp Libraries and Tools
+
+Quicklisp and package management
+Emacs and SLIME (Superior Lisp Interaction Mode)
+The Common Lisp Cookbook and other Lisp resources
+Week 9: Advanced Topics in Lisp
+
+Continuations and control flow
+Lazy evaluation and streams
+Garbage collection and memory management
+Week 10: Lisp in Industry
+
+Companies that use Lisp (e.g., Google, NASA)
+Job opportunities for Lisp programmers
+Contributing to the Lisp community
+Assessment:
+
+Weekly homework assignments (50%)
+Midterm exam (20%)
+Final project (30%)
+Textbook: Practical Common Lisp by Peter Seibel (available online for free)

@@ -1,0 +1,105 @@
+Lesson 6: Functions, Closures, and Iterators
+
+Functions and Methods
+Functions are defined using the fn keyword and can have parameters and return values. Methods are functions associated with a specific type and are called on an instance of that type. Methods have access to the instance's fields and can also use the self keyword to refer to the instance.
+
+Example: Functions and Methods
+
+    fn add(x: i32, y: i32) -> i32 {
+        x + y
+    }
+
+    struct Point {
+        x: i32,
+        y: i32,
+    }
+
+    impl Point {
+        fn distance_from_origin(&self) -> f64 {
+            let dx = self.x.pow(2);
+            let dy = self.y.pow(2);
+            f64::sqrt((dx + dy) as f64)
+        }
+    }
+
+    fn main() {
+        let result = add(3, 4);
+        println!("3 + 4 = {}", result);
+
+        let p = Point { x: 3, y: 4 };
+        let distance = p.distance_from_origin();
+        println!("Distance from origin: {}", distance);
+    }
+
+Higher-order Functions and Closures
+Higher-order functions are functions that take other functions as arguments or return them as results. Closures are anonymous functions that can capture their surrounding environment. They have a compact syntax and can be used as arguments to higher-order functions.
+
+Example: Higher-order Functions and Closures
+
+    fn apply<F>(x: i32, f: F) -> i32
+    where
+        F: Fn(i32) -> i32,
+    {
+        f(x)
+    }
+
+    fn main() {
+        let double = |x: i32| x * 2;
+        let triple = |x: i32| x * 3;
+
+        let x = 5;
+        let result = apply(x, double);
+        println!("Double {}: {}", x, result);
+
+        let result = apply(x, triple);
+        println!("Triple {}: {}", x, result);
+    }
+
+Iterators and the Iterator Trait
+Iterators are a powerful abstraction in Rust for processing sequences of elements. They provide a wide range of methods for transforming, filtering, and combining elements. The Iterator trait is implemented by types that can be iterated over, and you can also create your own custom iterators.
+
+Example: Iterators and the Iterator Trait
+
+    fn main() {
+        let numbers = vec![1, 2, 3, 4, 5];
+
+        let even_numbers: Vec<_> = numbers
+            .iter()
+            .filter(|x| x % 2 == 0)
+            .map(|x| x * 2)
+            .collect();
+
+        println!("Even numbers: {:?}", even_numbers);
+
+        let sum: i32 = numbers.iter().sum();
+        println!("Sum of numbers: {}", sum);
+    }
+
+    // Custom iterator
+    struct Range {
+        start: i32,
+        end: i32,
+    }
+
+    impl Iterator for Range {
+        type Item = i32;
+
+        fn next(&mut self) -> Option<Self::Item> {
+            if self.start >= self.end {
+                None
+            } else {
+                let result = self.start;
+                self.start += 1;
+                Some(result)
+            }
+        }
+    }
+
+    fn main() {
+        let range = Range { start: 1, end: 6 };
+        for num in range {
+            println!("{}", num);
+        }
+    }
+
+This concludes our in-depth lesson on functions, closures, and iterators in Rust.

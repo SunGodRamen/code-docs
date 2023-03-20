@@ -1,0 +1,70 @@
+Lesson 7: Modules and Packages
+
+Organizing Code with Modules
+Modules in Rust allow you to organize your code into separate units, making it more manageable and easier to navigate. You can create modules using the mod keyword, and use the pub keyword to specify if a module, function, or struct should be public.
+
+Example: Organizing Code with Modules
+
+File: src/main.rs
+
+    mod utils;
+
+    fn main() {
+        let x = 5;
+        let y = 7;
+        let result = utils::math::add(x, y);
+        println!("{} + {} = {}", x, y, result);
+    }
+
+File: src/utils/mod.rs
+
+    pub fn add(x: i32, y: i32) -> i32 {
+        x + y
+    }
+
+Creating and Using Libraries
+Rust allows you to create and use libraries to share reusable code across projects. Libraries can be created using the cargo new --lib command and can be included in other projects by adding them as dependencies in the Cargo.toml file.
+
+Example: Creating a Library
+
+Run the following command in your terminal:
+
+    $cargo new --lib my_math_lib
+
+File: my_math_lib/src/lib.rs
+
+    pub fn add(x: i32, y: i32) -> i32 {
+        x + y
+    }
+
+Example: Using the Library in Another Project
+
+File: my_project/Cargo.toml
+
+    [dependencies]
+    my_math_lib = { path = "../my_math_lib" }
+
+File: my_project/src/main.rs
+
+    use my_math_lib;
+
+    fn main() {
+        let x = 5;
+        let y = 7;
+        let result = my_math_lib::add(x, y);
+        println!("{} + {} = {}", x, y, result);
+    }
+
+The Cargo Package Manager and crates.io
+Cargo is the package manager for Rust, which makes it easy to manage dependencies, build, and test your projects. You can use Cargo to create new projects, add dependencies, and publish your libraries to crates.io, the Rust package registry.
+
+Example: Adding a Dependency from crates.io
+
+File: my_project/Cargo.toml
+
+    [dependencies]
+    serde = "1.0.126"
+
+In this example, we add the popular serialization library serde as a dependency in our project. You can find more libraries on crates.io and add them to your project by specifying their name and version in the Cargo.toml file.
+
+This concludes our in-depth lesson on modules and packages in Rust. We've covered organizing code with modules, creating and using libraries, and the Cargo package manager with crates.io. These concepts are essential for managing code, sharing reusable components, and leveraging existing libraries to simplify your projects.

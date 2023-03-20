@@ -1,0 +1,77 @@
+Lecture 2: Unix System Architecture
+
+I. Kernel, shell, and file system
+A. Kernel
+
+The core component of the Unix operating system
+Responsible for managing system resources and providing an interface between hardware and software
+Handles tasks such as device management, memory management, and process scheduling
+Examples of Unix kernels: Linux kernel, BSD kernel, and macOS XNU kernel
+B. Shell
+
+The user interface for interacting with the Unix operating system
+Provides a command-line interface (CLI) or graphical user interface (GUI)
+Interprets and executes user commands
+Examples of Unix shells: sh, bash, csh, tcsh, zsh, and ksh
+C. File system
+
+Responsible for organizing and managing files on a storage device
+Hierarchical structure, starting from the root directory (/)
+Unix file systems include ext4 (Linux), UFS (BSD), and HFS+ (macOS)
+The Virtual File System (VFS) provides a common interface for interacting with different file systems
+II. Process management and inter-process communication
+A. Process management
+
+A process is an instance of a running program
+The kernel assigns resources to processes and manages their execution
+Unix processes have a parent-child relationship, with the init process (PID 1) as the ancestor
+Process control operations: create, terminate, suspend, and resume
+B. Inter-process communication (IPC)
+
+Mechanisms for exchanging data between processes
+Unix IPC methods include pipes, named pipes (FIFOs), message queues, shared memory, and sockets
+Example using Rust:
+
+    use std::process::Command;
+
+    fn main() {
+        let output = Command::new("ls")
+            .arg("-l")
+            .output()
+            .expect("Failed to execute command");
+
+        println!("{}", String::from_utf8_lossy(&output.stdout));
+    }
+
+In this example, the Rust program creates a child process to execute the "ls" command with the "-l" argument. The output of the child process is captured and printed by the parent process.
+
+III. Memory management
+A. Memory allocation
+
+The kernel is responsible for allocating and managing memory for processes
+Virtual memory separates the physical memory address space from the logical address space used by processes
+Memory allocation in Rust is done using the Box, Rc, or Arc types for heap memory
+B. Memory protection
+
+Unix systems use a combination of hardware and software mechanisms to protect memory
+Processes are isolated from each other and cannot access another process's memory without permission
+Rust's ownership system and borrow checker help prevent memory-related bugs, such as use-after-free and data races
+C. Memory deallocation and garbage collection
+
+Memory must be deallocated when it is no longer needed to prevent memory leaks
+Unix systems may use garbage collection or manual memory management to free memory
+Rust uses a combination of ownership, lifetimes, and reference counting to manage memory without a garbage collector
+Example using Rust for memory allocation and deallocation:
+
+    fn main() {
+        let boxed_integer = Box::new(42);
+        println!("Boxed integer: {}", boxed_integer);
+
+        // The memory allocated for `boxed_integer` will be deallocated automatically
+        // when it goes out of scope.
+    }
+
+In this example, we create a boxed integer on the heap. Rust's ownership system ensures that the memory allocated for boxed_integer will be deallocated automatically when it goes out of scope, preventing memory leaks.
+
+In conclusion, the Unix system architecture consists of the kernel, shell, and file system, which together manage system resources and provide a robust and efficient environment for running programs. Process management and inter-process communication are essential components of the Unix operating system, allowing for the creation and control of running programs. Memory management in Unix systems ensures efficient allocation and deallocation of memory while maintaining protection and isolation between processes. The Rust programming language, with its strong emphasis on safety and concurrency, is well-suited for working within the Unix system architecture.
+

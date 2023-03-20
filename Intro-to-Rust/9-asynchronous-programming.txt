@@ -1,0 +1,74 @@
+Lesson 9: Asynchronous Programming
+
+Introduction to async/await
+Asynchronous programming allows you to run multiple tasks concurrently without blocking the execution of other tasks. The async keyword is used to declare an asynchronous function that returns a future, which represents a value that might not be available yet. The await keyword is used within an async function to suspend execution until the future is ready.
+
+Example: Basic async/await
+
+    async fn async_function() -> i32 {
+        // Simulate some async work
+        println!("Starting async work");
+        tokio::time::sleep(std::time::Duration::from_secs(2)).await;
+        println!("Async work completed");
+        42
+    }
+
+    #[tokio::main]
+    async fn main() {
+        let result = async_function().await;
+        println!("Result: {}", result);
+    }
+
+Futures and the Executor model
+Futures are a fundamental building block for asynchronous programming in Rust. A future represents a value that might not be available yet but can be computed asynchronously. The Executor model is responsible for running futures to completion. Executors manage the scheduling and execution of asynchronous tasks, allowing multiple tasks to run concurrently without blocking the main thread.
+
+Building Asynchronous Applications with Tokio
+Tokio is a popular runtime for writing asynchronous applications in Rust. It provides an executor, I/O, timers, and other utilities for building asynchronous applications.
+
+Example: Asynchronous Application with Tokio
+
+Add the following to your Cargo.toml:
+
+    [dependencies]
+    tokio = { version = "1.0", features = ["full"] }
+
+File: src/main.rs
+
+    use tokio::io::{self, AsyncReadExt, AsyncWriteExt};
+    use tokio::net::TcpListener;
+    use tokio::spawn;
+
+    async fn handle_client(mut stream: tokio::net::TcpStream) {
+        let mut buffer = [0; 1024];
+        loop {
+            let n = match stream.read(&mut buffer).await {
+                Ok(n) if n == 0 => return,
+                Ok(n) => n,
+                Err(e) => {
+                    eprintln!("Failed to read from socket: {:?}", e);
+                    return;
+                }
+            };
+
+            if let Err(e) = stream.write_all(&buffer[..n]).await {
+                eprintln!("Failed to write to socket: {:?}", e);
+                return;
+            }
+        }
+    }
+
+    #[tokio::main]
+    async fn main() -> io::Result<()> {
+        let listener = TcpListener::bind("127.0.0.1:8080").await?;
+        println!("Server listening on 127.0.0.1:8080");
+
+        loop {
+            let (stream, addr) = listener.accept().await?;
+            println!("New client: {:?}", addr);
+            spawn(handle_client(stream));
+        }
+    }
+
+This example demonstrates a simple asynchronous TCP server using Tokio. The server listens for incoming connections, spawns a new task to handle each client, and runs the tasks concurrently without blocking the main thread.
+
+This concludes our in-depth lesson on asynchronous programming in Rust. We've covered async/await, futures and the executor model, and building asynchronous applications with Tokio. These concepts are essential for writing efficient, non-blocking code in Rust.
